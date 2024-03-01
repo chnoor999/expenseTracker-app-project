@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// navigation
+import { NavigationContainer } from "@react-navigation/native";
+import StackScreen from "./app/screens/navigationScreens/StackScreen";
+import { ExpenseContextProvider } from "./app/store/Expense-Context";
+// custom fonts
+import { useFonts } from "expo-font";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  // custom fonts
+  const [fontLoaded] = useFonts({
+    robotoBold: require("./app/config/fonts/Roboto-Bold.ttf"),
+    roboto: require("./app/config/fonts/Roboto-Regular.ttf"),
+  });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  return fontLoaded ? (
+    <ExpenseContextProvider>
+      <NavigationContainer>
+        <StackScreen />
+      </NavigationContainer>
+    </ExpenseContextProvider>
+  ) : null;
+}
