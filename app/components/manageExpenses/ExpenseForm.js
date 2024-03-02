@@ -1,10 +1,7 @@
-import {
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
-import React from "react";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+//context
+import { useExpenseContext } from "../../store/Expense-Context";
 // navigation
 import { useNavigation } from "@react-navigation/native";
 // constant colors
@@ -13,11 +10,69 @@ import { Colors } from "../../config/colors/Colors";
 import AppInput from "./AppInput";
 import AppButton from "../UI/AppButton";
 import Logo from "./Logo";
+import { useFormatDate } from "../../hooks/date";
 
-export default function ExpenseForm() {
+export default function ExpenseForm({ isEditing, editID }) {
   const navigation = useNavigation();
+  const { data, edit, add } = useExpenseContext();
 
-  const onConfirmHandler = () => {};
+  //finding data of editabele expense
+  const editabeleExpense = data.find((item) => item.id == editID);
+
+  const today = new Date();
+
+  // state that holds form data
+  const [form, setForm] = useState({
+    amount: isEditing ? editabeleExpense.amount.toString() : "",
+    amountISVALID: true,
+    date: isEditing
+      ? editabeleExpense.date.toISOString().slice(0, 10)
+      : today.toISOString().slice(0, 10),
+    dateISVALID: true,
+    description: isEditing ? editabeleExpense.description : "",
+    descriptionISVALID: true,
+  });
+
+  // function that store input text in it place
+  const handleOnChange = (type, text) => {
+    setForm((prevalue) => {
+      return {
+        ...prevalue,
+        [type]: text,
+      };
+    });
+  };
+
+  const onConfirmHandler = () => {
+    const object = {
+      amount: +form.amount,
+      date: new Date(form.date),
+      description: form.description,
+    };
+
+    // form valiadtion
+    const amountISVALID = !isNaN(object.amount) && object.amount > 0;
+    const dateISVALID = object.date != "Invalid Date";
+    const descriptionISVALID = object.description.trim().length > 0;
+
+    if (!amountISVALID || !dateISVALID || !descriptionISVALID) {
+      setForm((pre) => {
+        return {
+          ...pre,
+          amountISVALID,
+          dateISVALID,
+          descriptionISVALID,
+        };
+      });
+    } else {
+      if (isEditing) {
+        edit(editID, object);
+      } else {
+        add(object);
+      }
+      navigation.goBack();
+    }
+  };
 
   const onCancelHandler = () => {
     navigation.goBack();
@@ -34,11 +89,17 @@ export default function ExpenseForm() {
             label={"Amount"}
             containerStyle={{ flex: 1 }}
             keyboardType={"numeric"}
+            value={form.amount}
+            onChangeText={handleOnChange.bind(this, "amount")}
+            isError={!form.amountISVALID}
           />
           <AppInput
             label={"Date"}
             containerStyle={{ flex: 1 }}
             placeholder="YYYY-MM-DD"
+            value={form.date}
+            onChangeText={handleOnChange.bind(this, "date")}
+            isError={!form.dateISVALID}
           />
         </View>
         <View>
@@ -46,11 +107,16 @@ export default function ExpenseForm() {
             label={"Description"}
             multiline={true}
             inputStyle={{ height: 100, textAlignVertical: "top" }}
+            value={form.description}
+            onChangeText={handleOnChange.bind(this, "description")}
+            isError={!form.descriptionISVALID}
           />
         </View>
         <View style={styles.buttonsContainer}>
           <AppButton onPress={onCancelHandler}>Cancel</AppButton>
-          <AppButton onPress={onConfirmHandler}>Update</AppButton>
+          <AppButton onPress={onConfirmHandler}>
+            {isEditing ? "Update" : "Add"}
+          </AppButton>
         </View>
       </KeyboardAvoidingView>
     </View>

@@ -2,15 +2,22 @@ import { StyleSheet, Text, View } from "react-native";
 // constant color
 import { Colors } from "../../config/colors/Colors";
 
-export default function ExpenseSummary({ expensePeriod, expense }) {
+export default function ExpenseSummary({
+  expensePeriod,
+  expense,
+  swapButton,
+}) {
   // sum of all expense
-    const totalSum = expense.reduce((sum, currentExpense) => {
-      return sum + currentExpense.amount;
-    }, 0);
+  const totalSum = expense.reduce((sum, currentExpense) => {
+    return sum + currentExpense.amount;
+  }, 0);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.expensePeriod}>{expensePeriod}</Text>
+      <View style={styles.summaryContainer}>
+        <Text style={styles.expensePeriod}>{expensePeriod}</Text>
+        {swapButton}
+      </View>
       <Text style={styles.totalAmount}>${totalSum.toFixed(2)}</Text>
     </View>
   );
@@ -26,6 +33,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 15,
     marginHorizontal: 10,
+  },
+  summaryContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
   },
   expensePeriod: {
     fontSize: 16,

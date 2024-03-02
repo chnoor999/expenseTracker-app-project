@@ -1,64 +1,57 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 export const ExpenseContext = createContext({
   data: [],
+  add: (expnese) => {},
+  deleteExpense: (id) => {},
+  edit: (id, expense) => {},
 });
 
-const DUMMYDATA = [
-  {
-    id: "m1",
-    description: "Story book",
-    amount: 5.22,
-    date: new Date(),
-  },
-  {
-    id: "m2",
-    description: "Notebook",
-    amount: 3.5,
-    date: new Date(),
-  },
-  {
-    id: "m3",
-    description: "Pen",
-    amount: 1.2,
-    date: new Date(),
-  },
-  {
-    id: "m4",
-    description: "Pencil",
-    amount: 0.8,
-    date: new Date(),
-  },
-  {
-    id: "m5",
-    description: "Backpack",
-    amount: 20.0,
-    date: new Date(),
-  },
-  {
-    id: "m6",
-    description: "Water bottle",
-    amount: 2.5,
-    date: new Date(),
-  },
-  {
-    id: "m7",
-    description: "Lunch box",
-    amount: 4.0,
-    date: new Date(),
-  },
-  {
-    id: "m8",
-    description: "Calculator",
-    amount: 7.99,
-    date: new Date(),
-  },
-];
+const DUMMYDATA = [];
 
 export const ExpenseContextProvider = ({ children }) => {
-  const value = {
-    data: DUMMYDATA,
+  const expenseReducer = (state, action) => {
+    switch (action.type) {
+      case "add":
+        return [
+          {
+            id: new Date() + Math.random() * 1000,
+            ...action.payload,
+          },
+          ...state,
+        ];
+      case "delete":
+        return state.filter((item) => item.id != action.id);
+      case "edit":
+        return state.map((item) => {
+          if (item.id == action.id) {
+            return {
+              ...item,
+              ...action.payload,
+            };
+          } else {
+            return item;
+          }
+        });
+      default:
+        return state;
+    }
   };
+  const [expenseState, expenseDispatch] = useReducer(expenseReducer, DUMMYDATA);
+
+  const value = {
+    data: expenseState,
+    add: (payload) => {
+      expenseDispatch({ type: "add", payload });
+    },
+    deleteExpense: (id) => {
+      expenseDispatch({ type: "delete", id });
+    },
+    edit: (id, payload) => {
+      expenseDispatch({ type: "edit", id, payload });
+    },
+  };
+
   return (
     <ExpenseContext.Provider value={value}>{children}</ExpenseContext.Provider>
   );

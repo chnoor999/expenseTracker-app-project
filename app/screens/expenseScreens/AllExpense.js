@@ -1,13 +1,88 @@
 import { StyleSheet } from "react-native";
-// compoent
-import ExpenseOutput from "../../components/expense/ExpenseOutput";
+// component
+import ExpenseOutput from "../../components/expenses/ExpenseOutput";
 // context
 import { useExpenseContext } from "../../store/Expense-Context";
+//icons
+import IconButton from "../../components/UI/IconButton";
+import { Colors } from "../../config/colors/Colors";
+import FilterBox from "../../components/UI/FilterBox";
+import { useEffect, useState } from "react";
 
 export default function AllExpense() {
   const { data } = useExpenseContext();
+  const [DATATOSHOW, setDATATOSHOW] = useState(data);
 
-  return <ExpenseOutput expenseData={data} expensePeriod={"Total"} />;
+  useEffect(() => {
+    setDATATOSHOW(data);
+  }, [data]);
+
+  // state for filter box visible or not
+  const [filterVisible, setFilterVisible] = useState(false);
+  // date for filter state
+  const [date, setDate] = useState({ value: "", isValid: true });
+
+  const handleDateChange = (text) => {
+    setDate((prev) => ({ ...prev, value: text }));
+  };
+
+  const handleFilter = () => {
+    setFilterVisible(true);
+  };
+
+  // function for box filter cancel
+  const onCancel = () => {
+    setFilterVisible(false);
+    setDate((prev) => ({ ...prev, value: "" }));
+    setDATATOSHOW(data);
+    setDate((pre) => ({ ...pre, isValid: true }));
+  };
+
+  const onApply = () => {
+    const dateObj = new Date(date.value);
+    const dateIsValid = dateObj.toString() !== "Invalid Date";
+
+    if (dateIsValid) {
+      const filtered = data.filter((item) => {
+        return (
+          item.date.toISOString().slice(0, 10) ===
+          dateObj.toISOString().slice(0, 10)
+        );
+      });
+
+      setDATATOSHOW(filtered);
+      setFilterVisible(false);
+      setDate((pre) => ({ ...pre, isValid: true }));
+    } else {
+      setDate((pre) => ({ ...pre, isValid: false }));
+    }
+  };
+
+  return (
+    <>
+      <ExpenseOutput
+        swapButton={
+          <IconButton
+            onPress={handleFilter}
+            name={"filter-sharp"}
+            size={18}
+            color={Colors.green700}
+            style={{ width: 30, textAlign: "center", padding: 0 }}
+          />
+        }
+        expenseData={DATATOSHOW}
+        expensePeriod={"Total"}
+        emptyText={"There are no expenses recorded."}
+      />
+      <FilterBox
+        visible={filterVisible}
+        onCancel={onCancel}
+        date={date}
+        handleDateChange={handleDateChange}
+        onApply={onApply}
+      />
+    </>
+  );
 }
 
 const styles = StyleSheet.create({});

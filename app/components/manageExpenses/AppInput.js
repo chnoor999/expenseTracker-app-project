@@ -6,11 +6,16 @@ export default function AppInput({
   containerStyle,
   inputStyle,
   label,
+  isError,
   ...props
 }) {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={styles.label}>{label}</Text>
+      {label ? (
+        <Text style={styles.label}>
+          {label} {<Text style={styles.error}>{isError ? "*" : null}</Text>}
+        </Text>
+      ) : null}
       <TextInput style={[styles.input, inputStyle]} {...props} />
     </View>
   );
@@ -32,5 +37,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.green700,
     padding: 10,
+  },
+  error: {
+    color: "tomato",
   },
 });

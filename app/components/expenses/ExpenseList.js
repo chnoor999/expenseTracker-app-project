@@ -3,10 +3,20 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors } from "../../config/colors/Colors";
 // formate date hook
 import { useFormatDate } from "../../hooks/date";
+// navigation
+import { useNavigation } from "@react-navigation/native";
 
-export default function ExpenseList({ description, date, amount }) {
+export default function ExpenseList({ description, date, amount, id ,onLongPress }) {
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity activeOpacity={0.7}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={() => {
+        navigation.navigate("manageExpense", { id });
+      }}
+      onLongPress={onLongPress}
+    >
       <View style={styles.container}>
         <View style={styles.detailBox}>
           <Text style={styles.description}>{description}</Text>
@@ -25,11 +35,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginHorizontal:10,
-    marginBottom:10,
+    marginHorizontal: 10,
+    marginBottom: 10,
     borderRadius: 6,
     padding: 10,
     backgroundColor: Colors.green700,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { height: 0, width: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
   },
   description: {
     fontSize: 16,

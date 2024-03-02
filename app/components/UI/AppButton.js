@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 10,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { height: 0, width: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
   },
   text: {
     fontSize: 16,

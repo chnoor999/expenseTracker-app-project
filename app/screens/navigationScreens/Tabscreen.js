@@ -9,6 +9,7 @@ import IconButton from "../../components/UI/IconButton";
 // screens
 import AllExpense from "../expenseScreens/AllExpense";
 import RecentExpense from "../expenseScreens/RecentExpense";
+import { StyleSheet } from "react-native";
 
 export default function Tabscreen() {
   const navigation = useNavigation();
@@ -27,8 +28,8 @@ export default function Tabscreen() {
         tabBarInactiveTintColor: Colors.green800,
         headerRight: () => (
           <IconButton
-            style={{ marginHorizontal: 13 }}
-            name={"add-circle-outline"}
+            style={styles.icon}
+            name={"add"}
             size={28}
             color={Colors.green100}
             onPress={addHandler}
@@ -59,3 +60,15 @@ export default function Tabscreen() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  icon: {
+    marginHorizontal: 13,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 4,
+    backgroundColor: Colors.green700,
+  },
+});
