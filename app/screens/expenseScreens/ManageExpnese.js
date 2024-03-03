@@ -34,6 +34,14 @@ export default function ManageExpnese({ route, navigation }) {
     });
   }, []);
 
+  useLayoutEffect(() => {
+    if (isEditing) {
+      navigation.setOptions({ animation: "slide_from_right" });
+    } else {
+      navigation.setOptions({ animation: "slide_from_bottom" });
+    }
+  }, []);
+
   return <ExpenseForm editID={editID} isEditing={isEditing} />;
 }
 

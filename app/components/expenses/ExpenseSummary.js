@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   expensePeriod: {
     fontSize: 16,
     color: Colors.green700,
+    fontFamily:"roboto"
   },
   totalAmount: {
     fontSize: 16,

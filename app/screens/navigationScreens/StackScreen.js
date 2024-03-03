@@ -24,7 +24,7 @@ export default function StackScreen() {
       <Stack.Screen
         name="manageExpense"
         component={ManageExpense}
-        options={{ animation: "slide_from_bottom" }}
+        // options={{ animation: "slide_from_bottom" }}
       />
     </Stack.Navigator>
   );

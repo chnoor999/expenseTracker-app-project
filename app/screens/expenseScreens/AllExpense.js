@@ -8,6 +8,7 @@ import IconButton from "../../components/UI/IconButton";
 import { Colors } from "../../config/colors/Colors";
 import FilterBox from "../../components/UI/FilterBox";
 import { useEffect, useState } from "react";
+import Dot from "../../components/UI/Dot";
 
 export default function AllExpense() {
   const { data } = useExpenseContext();
@@ -62,17 +63,26 @@ export default function AllExpense() {
     <>
       <ExpenseOutput
         swapButton={
-          <IconButton
-            onPress={handleFilter}
-            name={"filter-sharp"}
-            size={18}
-            color={Colors.green700}
-            style={{ width: 30, textAlign: "center", padding: 0 }}
-          />
+          <>
+            <IconButton
+              onPress={handleFilter}
+              name={"filter-sharp"}
+              size={18}
+              color={Colors.green700}
+              style={{ width: 30, textAlign: "center", padding: 0 }}
+            />
+            {/* this custom dot is still over 
+            the filter button if the filter is appliead */}
+            {date.value && <Dot />}
+          </>
         }
         expenseData={DATATOSHOW}
         expensePeriod={"Total"}
-        emptyText={"There are no expenses recorded."}
+        emptyText={
+          date.value
+            ? "No expenses found for selected date"
+            : "There are no expenses recorded."
+        }
       />
       <FilterBox
         visible={filterVisible}

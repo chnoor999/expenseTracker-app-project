@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   data: {
     fontSize: 14,
     color: "#ffffffac",
+    fontFamily:"roboto"
   },
   amountbox: {
     alignItems: "center",
