@@ -1,13 +1,14 @@
-import { StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
 // component
 import ExpenseOutput from "../../components/expenses/ExpenseOutput";
 // context
 import { useExpenseContext } from "../../store/Expense-Context";
+// constant color
+import { Colors } from "../../config/colors/Colors";
 //icons
 import IconButton from "../../components/UI/IconButton";
-import { Colors } from "../../config/colors/Colors";
+// component
 import FilterBox from "../../components/UI/FilterBox";
-import { useEffect, useState } from "react";
 import Dot from "../../components/UI/Dot";
 
 export default function AllExpense() {
@@ -95,4 +96,3 @@ export default function AllExpense() {
   );
 }
 
-const styles = StyleSheet.create({});

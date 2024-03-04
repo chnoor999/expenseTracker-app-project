@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { useLayoutEffect } from "react";
+// component
 import ExpenseForm from "../../components/manageExpenses/ExpenseForm";
 import IconButton from "../../components/UI/IconButton";
+// constant color
 import { Colors } from "../../config/colors/Colors";
+// context
 import { useExpenseContext } from "../../store/Expense-Context";
 
 export default function ManageExpnese({ route, navigation }) {
@@ -44,5 +46,3 @@ export default function ManageExpnese({ route, navigation }) {
 
   return <ExpenseForm editID={editID} isEditing={isEditing} />;
 }
-
-const styles = StyleSheet.create({});

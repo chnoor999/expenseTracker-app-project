@@ -2,11 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 // constant color
 import { Colors } from "../../config/colors/Colors";
 
-export default function ExpenseSummary({
-  expensePeriod,
-  expense,
-  swapButton,
-}) {
+export default function ExpenseSummary({ expensePeriod, expense, swapButton }) {
   // sum of all expense
   const totalSum = expense.reduce((sum, currentExpense) => {
     return sum + currentExpense.amount;
@@ -43,7 +39,7 @@ const styles = StyleSheet.create({
   expensePeriod: {
     fontSize: 16,
     color: Colors.green700,
-    fontFamily:"roboto"
+    fontFamily: "roboto",
   },
   totalAmount: {
     fontSize: 16,

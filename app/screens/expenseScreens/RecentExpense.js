@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 // component
 import ExpenseOutput from "../../components/expenses/ExpenseOutput";
 // context
 import { useExpenseContext } from "../../store/Expense-Context";
 import { useDaysago } from "../../hooks/date";
-import IconButton from "../../components/UI/IconButton";
+// constant color
 import { Colors } from "../../config/colors/Colors";
+// icons
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function RecentExpense() {
@@ -43,4 +43,3 @@ export default function RecentExpense() {
   );
 }
 
-const styles = StyleSheet.create({});

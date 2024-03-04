@@ -1,6 +1,7 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+// constant colors
 import { Colors } from "../../config/colors/Colors";
+// component
 import AppInput from "../manageExpenses/AppInput";
 
 export default function FilterBox({

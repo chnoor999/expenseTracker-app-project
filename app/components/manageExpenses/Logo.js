@@ -1,5 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, View } from "react-native";
 
 export default function Logo() {
   return (
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
   image: {
     width: "30%",
     height: "30%",
-    borderRadius:100,
-    objectFit:"contain",
+    borderRadius: 100,
+    objectFit: "contain",
   },
 });

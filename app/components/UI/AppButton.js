@@ -1,5 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 // constant colors
 import { Colors } from "../../config/colors/Colors";
 

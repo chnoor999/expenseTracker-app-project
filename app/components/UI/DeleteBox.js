@@ -6,12 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
 import { Colors } from "../../config/colors/Colors";
 
 export default function DeleteBox({ visible, onCancel, onDelete }) {
-  const [deleteBox, setDeletBox] = useState(false);
-
   return (
     <Modal animationType="none" transparent={true} visible={visible}>
       <Pressable style={styles.container}>
@@ -43,11 +40,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green900,
     borderRadius: 6,
     width: 250,
-    padding:10,
+    padding: 10,
     paddingHorizontal: 15,
-    justifyContent:"center",
-    elevation:4,
-    shadowColor:"#000",
+    justifyContent: "center",
+    elevation: 4,
+    shadowColor: "#000",
   },
   text: {
     paddingVertical: 10,
@@ -58,9 +55,9 @@ const styles = StyleSheet.create({
   btncontainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems:"center",
+    alignItems: "center",
     borderTopWidth: 1,
-    borderColor:"#ffffff14"
+    borderColor: "#ffffff14",
   },
   delete: {
     color: "#ff6347ff",

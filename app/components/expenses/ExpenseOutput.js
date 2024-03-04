@@ -1,12 +1,13 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
 // constant colors
 import { Colors } from "../../config/colors/Colors";
+// context
+import { useExpenseContext } from "../../store/Expense-Context";
 // component
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
 import DeleteBox from "../UI/DeleteBox";
-import { useState } from "react";
-import { useExpenseContext } from "../../store/Expense-Context";
 
 export default function ExpenseOutput({
   expensePeriod,
@@ -16,7 +17,7 @@ export default function ExpenseOutput({
 }) {
   const { deleteExpense } = useExpenseContext();
 
-  // delete the expense on long press stuff
+  // delete the expense on long press 
   const [deleteBox, setDeletebox] = useState(false);
   const [deletedID, setdeletedID] = useState();
 

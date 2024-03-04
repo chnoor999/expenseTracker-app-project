@@ -6,7 +6,13 @@ import { useFormatDate } from "../../hooks/date";
 // navigation
 import { useNavigation } from "@react-navigation/native";
 
-export default function ExpenseList({ description, date, amount, id ,onLongPress }) {
+export default function ExpenseList({
+  description,
+  date,
+  amount,
+  id,
+  onLongPress,
+}) {
   const navigation = useNavigation();
 
   return (
@@ -55,7 +61,7 @@ const styles = StyleSheet.create({
   data: {
     fontSize: 14,
     color: "#ffffffac",
-    fontFamily:"roboto"
+    fontFamily: "roboto",
   },
   amountbox: {
     alignItems: "center",

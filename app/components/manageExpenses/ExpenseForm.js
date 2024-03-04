@@ -10,7 +10,6 @@ import { Colors } from "../../config/colors/Colors";
 import AppInput from "./AppInput";
 import AppButton from "../UI/AppButton";
 import Logo from "./Logo";
-import { useFormatDate } from "../../hooks/date";
 
 export default function ExpenseForm({ isEditing, editID }) {
   const navigation = useNavigation();

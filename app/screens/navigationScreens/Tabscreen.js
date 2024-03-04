@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 // navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
@@ -9,7 +10,6 @@ import IconButton from "../../components/UI/IconButton";
 // screens
 import AllExpense from "../expenseScreens/AllExpense";
 import RecentExpense from "../expenseScreens/RecentExpense";
-import { StyleSheet } from "react-native";
 
 export default function Tabscreen() {
   const navigation = useNavigation();
