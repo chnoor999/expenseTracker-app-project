@@ -7,7 +7,7 @@ export const ExpenseContext = createContext({
   edit: (id, expense) => {},
 });
 
-const DUMMYDATA = [];
+const intialState = [];
 
 export const ExpenseContextProvider = ({ children }) => {
   const expenseReducer = (state, action) => {
@@ -37,7 +37,10 @@ export const ExpenseContextProvider = ({ children }) => {
         return state;
     }
   };
-  const [expenseState, expenseDispatch] = useReducer(expenseReducer, DUMMYDATA);
+  const [expenseState, expenseDispatch] = useReducer(
+    expenseReducer,
+    intialState
+  );
 
   const value = {
     data: expenseState,

@@ -1,4 +1,5 @@
 import { StyleSheet, View } from "react-native";
+import {Colors} from "../../config/colors/Colors"
 
 export default function Dot() {
   return <View style={styles.container}></View>;
@@ -6,12 +7,14 @@ export default function Dot() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 8,
-    width: 8,
+    height: 10,
+    width: 10,
     borderRadius: 50,
     backgroundColor: "red",
     position: "absolute",
-    top: 2,
-    right: 3,
+    top: 0,
+    right: 12,
+    borderWidth:2,
+    borderColor:Colors.green100
   },
 });

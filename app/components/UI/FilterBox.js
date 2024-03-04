@@ -84,9 +84,13 @@ const styles = StyleSheet.create({
   cancel: {
     color: "#ffffffb7",
     padding: 10,
+    minWidth:80,
+    textAlign:"center"
   },
   apply: {
     padding: 10,
     color: "#05a8ff",
+    minWidth:80,
+    textAlign:"center"
   },
 });

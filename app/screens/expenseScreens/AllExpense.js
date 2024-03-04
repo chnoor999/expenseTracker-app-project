@@ -10,6 +10,7 @@ import IconButton from "../../components/UI/IconButton";
 // component
 import FilterBox from "../../components/UI/FilterBox";
 import Dot from "../../components/UI/Dot";
+import { Pressable } from "react-native";
 
 export default function AllExpense() {
   const { data } = useExpenseContext();
@@ -64,9 +65,8 @@ export default function AllExpense() {
     <>
       <ExpenseOutput
         swapButton={
-          <>
+          <Pressable onPress={handleFilter} style={{ paddingHorizontal: 8 }}>
             <IconButton
-              onPress={handleFilter}
               name={"filter-sharp"}
               size={18}
               color={Colors.green700}
@@ -75,7 +75,7 @@ export default function AllExpense() {
             {/* this custom dot is still over 
             the filter button if the filter is appliead */}
             {date.value && <Dot />}
-          </>
+          </Pressable>
         }
         expenseData={DATATOSHOW}
         expensePeriod={"Total"}
@@ -95,4 +95,3 @@ export default function AllExpense() {
     </>
   );
 }
-
