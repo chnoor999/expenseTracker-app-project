@@ -31,7 +31,7 @@ Validation of expense input fields on the Manage Expense screen
 Error messages displayed on the interface for invalid inputs
 
 State Management:
-app being managed by the Context API
+App being managed by the Context API
 
 Custom Fonts:
 The app utilizes custom fonts.using useFonts
