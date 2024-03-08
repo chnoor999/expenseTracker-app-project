@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 // component
 import ExpenseForm from "../../components/manageExpenses/ExpenseForm";
 import IconButton from "../../components/UI/IconButton";
@@ -6,6 +6,9 @@ import IconButton from "../../components/UI/IconButton";
 import { Colors } from "../../config/colors/Colors";
 // context
 import { useExpenseContext } from "../../store/Expense-Context";
+import { delExpense } from "../../hooks/axios";
+import ErrorOverlay from "../../components/UI/ErrorOverlay";
+import LoadingOverlay from "../../components/UI/LoadingOverLay";
 
 export default function ManageExpnese({ route, navigation }) {
   // id of expense object that want to edit
@@ -15,10 +18,19 @@ export default function ManageExpnese({ route, navigation }) {
 
   const { deleteExpense } = useExpenseContext();
 
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   // function handle press delete
-  const handleDelete = () => {
-    deleteExpense(editID);
-    navigation.goBack();
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true);
+      await delExpense(editID);
+      deleteExpense(editID);
+      navigation.goBack();
+    } catch (error) {
+      setError("Failed to delete expense try again later.");
+    }
   };
 
   useLayoutEffect(() => {
@@ -43,6 +55,14 @@ export default function ManageExpnese({ route, navigation }) {
       navigation.setOptions({ animation: "slide_from_bottom" });
     }
   }, []);
+
+  if (error?.length) {
+    return <ErrorOverlay message={error} />;
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return <ExpenseForm editID={editID} isEditing={isEditing} />;
 }

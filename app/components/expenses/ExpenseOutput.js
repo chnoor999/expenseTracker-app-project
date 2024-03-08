@@ -8,6 +8,8 @@ import { useExpenseContext } from "../../store/Expense-Context";
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
 import DeleteBox from "../UI/DeleteBox";
+import { delExpense } from "../../hooks/axios";
+import ErrorOverlay from "../UI/ErrorOverlay";
 
 export default function ExpenseOutput({
   expensePeriod,
@@ -17,7 +19,7 @@ export default function ExpenseOutput({
 }) {
   const { deleteExpense } = useExpenseContext();
 
-  // delete the expense on long press 
+  // delete the expense on long press
   const [deleteBox, setDeletebox] = useState(false);
   const [deletedID, setdeletedID] = useState();
 
@@ -26,14 +28,25 @@ export default function ExpenseOutput({
     setdeletedID(id);
   };
 
-  const onDelete = () => {
-    deleteExpense(deletedID);
-    setDeletebox(false);
-    setdeletedID(null);
+  const [error, setError] = useState();
+
+  const onDelete = async () => {
+    try {
+      await delExpense(deletedID);
+      deleteExpense(deletedID);
+      setDeletebox(false);
+      setdeletedID(null);
+    } catch (error) {
+      setError("Failed to delete expense try again later.");
+    }
   };
   const onCancel = () => {
     setDeletebox(false);
   };
+
+  if (!!error) {
+    return <ErrorOverlay message={error} />;
+  }
 
   return (
     <View style={styles.container}>

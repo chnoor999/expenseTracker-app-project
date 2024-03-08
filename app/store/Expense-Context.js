@@ -1,25 +1,33 @@
-import { createContext, useContext, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 export const ExpenseContext = createContext({
   data: [],
+  set: (expense) => {},
   add: (expnese) => {},
   deleteExpense: (id) => {},
   edit: (id, expense) => {},
 });
 
-const intialState = [];
-
 export const ExpenseContextProvider = ({ children }) => {
+  const intialState = [];
+
   const expenseReducer = (state, action) => {
     switch (action.type) {
       case "add":
         return [
           {
-            id: new Date() + Math.random() * 1000,
             ...action.payload,
           },
           ...state,
         ];
+      case "set":
+        return action.payload;
       case "delete":
         return state.filter((item) => item.id != action.id);
       case "edit":
@@ -44,6 +52,9 @@ export const ExpenseContextProvider = ({ children }) => {
 
   const value = {
     data: expenseState,
+    set: (payload) => {
+      expenseDispatch({ type: "set", payload });
+    },
     add: (payload) => {
       expenseDispatch({ type: "add", payload });
     },

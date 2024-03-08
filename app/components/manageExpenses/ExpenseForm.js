@@ -10,10 +10,16 @@ import { Colors } from "../../config/colors/Colors";
 import AppInput from "./AppInput";
 import AppButton from "../UI/AppButton";
 import Logo from "./Logo";
+import { editExpense, postExpense } from "../../hooks/axios";
+import ErrorOverlay from "../UI/ErrorOverlay";
+import LoadingOverlay from "../UI/LoadingOverLay"
 
 export default function ExpenseForm({ isEditing, editID }) {
   const navigation = useNavigation();
   const { data, edit, add } = useExpenseContext();
+
+  const [error, setError] = useState();
+  const [isLoading,setIsLoading] = useState(false)
 
   //finding data of editabele expense
   const editabeleExpense = data.find((item) => item.id == editID);
@@ -42,7 +48,7 @@ export default function ExpenseForm({ isEditing, editID }) {
     });
   };
 
-  const onConfirmHandler = () => {
+  const onConfirmHandler = async () => {
     const object = {
       amount: +form.amount,
       date: new Date(form.date),
@@ -65,17 +71,38 @@ export default function ExpenseForm({ isEditing, editID }) {
       });
     } else {
       if (isEditing) {
-        edit(editID, object);
+        try {
+          setIsLoading(true)
+          edit(editID, object);
+          await editExpense(editID, object);
+          navigation.goBack();
+        } catch (error) {
+          setError("Failed to edit expense try again later.");
+        }
       } else {
-        add(object);
+        try {
+          setIsLoading(true)
+          const id = await postExpense(object);
+          add({ ...object, id });
+          navigation.goBack();
+        } catch (error) {
+          setError("Failed to add expense try again later.");
+        }
       }
-      navigation.goBack();
     }
   };
 
   const onCancelHandler = () => {
     navigation.goBack();
   };
+
+  if (error?.length) {
+    return <ErrorOverlay message={error} />;
+  }
+
+  if(isLoading){
+    return <LoadingOverlay />
+  }
 
   return (
     <View style={styles.formContainer}>

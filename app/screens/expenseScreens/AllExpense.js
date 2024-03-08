@@ -11,9 +11,12 @@ import IconButton from "../../components/UI/IconButton";
 import FilterBox from "../../components/UI/FilterBox";
 import Dot from "../../components/UI/Dot";
 import { Pressable } from "react-native";
+import { getExpense } from "../../hooks/axios";
+import LoadingOverLay from "../../components/UI/LoadingOverLay";
+import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function AllExpense() {
-  const { data } = useExpenseContext();
+  const { data, set } = useExpenseContext();
   const [DATATOSHOW, setDATATOSHOW] = useState(data);
 
   useEffect(() => {
@@ -60,6 +63,40 @@ export default function AllExpense() {
       setDate((pre) => ({ ...pre, isValid: false }));
     }
   };
+  const [isFetched, setIsFetched] = useState(false);
+  const [error, setError] = useState();
+
+  // fetch expense from firebase
+  useEffect(() => {
+    (async () => {
+      try {
+        setError(null)
+        const data = await getExpense();
+        const arr = [];
+        for (const key in data) {
+          const obj = {
+            ...data[key],
+            date: new Date(data[key].date),
+          };
+          arr.push(obj);
+        }
+        set(arr.reverse());
+        setIsFetched(true);
+      } catch (error) {
+        setError(
+          "Failed to fetch expenses try again later."
+        );
+      }
+    })();
+  }, []);
+
+  if (!isFetched && error?.length) {
+    return <ErrorOverlay message={error} />;
+  }
+
+  if (!isFetched) {
+    return <LoadingOverLay />;
+  }
 
   return (
     <>
