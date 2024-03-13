@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
     backgroundColor: Colors.green800,
-    // justifyContent: "center",
     padding: 15,
   },
   box1: {

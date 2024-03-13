@@ -1,7 +1,7 @@
 // managing expense in firbase
 import axios from "axios";
 
-const BASEURL = "https://react-native-demo-27b12-default-rtdb.firebaseio.com";
+const BASEURL = "https://expensetracker-7c464-default-rtdb.firebaseio.com";
 
 // this hook post an expense
 export const postExpense = async (expenseData) => {

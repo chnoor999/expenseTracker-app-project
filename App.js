@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import StackScreen from "./app/screens/navigationScreens/StackScreen";
+import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
 import { ExpenseContextProvider } from "./app/store/Expense-Context";
 import { useFonts } from "expo-font";
 import NetInfo from "@react-native-community/netinfo";
 import { Alert } from "react-native";
+import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack";
 
 export default function App() {
   useEffect(() => {
@@ -36,7 +37,8 @@ export default function App() {
   return (
     <ExpenseContextProvider>
       <NavigationContainer>
-        <StackScreen />
+        {/* <ExpenseStack /> */}
+        <AuthStack />
       </NavigationContainer>
     </ExpenseContextProvider>
   );

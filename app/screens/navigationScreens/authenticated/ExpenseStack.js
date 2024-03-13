@@ -2,11 +2,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 // screens
-import ManageExpense from "../expenseScreens/ManageExpnese";
-import Tabscreen from "./Tabscreen";
-import { Colors } from "../../config/colors/Colors";
+import ManageExpense from "../../expenseScreens/ManageExpnese";
+import ExpenseTab from "./ExpenseTab";
+import { Colors } from "../../../config/colors/Colors";
 
-export default function StackScreen() {
+export default function ExpenseStack() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -16,7 +16,7 @@ export default function StackScreen() {
     >
       <Stack.Screen
         name="expenseScreens"
-        component={Tabscreen}
+        component={ExpenseTab}
         options={{
           headerShown: false,
         }}

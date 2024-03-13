@@ -4,14 +4,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
 import { useNavigation } from "@react-navigation/native";
 // constant colors
-import { Colors } from "../../config/colors/Colors";
+import { Colors } from "../../../config/colors/Colors";
 // icons
-import IconButton from "../../components/UI/IconButton";
+import IconButton from "../../../components/UI/IconButton";
 // screens
-import AllExpense from "../expenseScreens/AllExpense";
-import RecentExpense from "../expenseScreens/RecentExpense";
+import AllExpense from "../../expenseScreens/AllExpense";
+import RecentExpense from "../../expenseScreens/RecentExpense";
 
-export default function Tabscreen() {
+export default function ExpenseTab() {
   const navigation = useNavigation();
   const addHandler = () => {
     navigation.navigate("manageExpense");
