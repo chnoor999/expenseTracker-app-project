@@ -8,7 +8,11 @@ import AppButton from "../UI/AppButton";
 import Logo from "../manageExpenses/Logo";
 import FlatButton from "../UI/FlatButton";
 
-export default function AuthContent({ isLogin, onAuthanticate }) {
+export default function AuthContent({
+  isLogin,
+  onAuthanticate,
+  isResetPassword,
+}) {
   const navigation = useNavigation();
 
   // state of form data and validation
@@ -61,8 +65,9 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
     // throw error
     if (
       !EMAILISVALID ||
-      !PASSWORDISVALID ||
-      (!isLogin && (!CONFIRMEMAILISVALID || !CONFIRMEPASSWORDISVALID))
+      (!isResetPassword &&
+        (!PASSWORDISVALID ||
+          (!isLogin && (!CONFIRMEMAILISVALID || !CONFIRMEPASSWORDISVALID))))
     ) {
       setForm((pre) => {
         return {
@@ -76,6 +81,10 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
     } else {
       onAuthanticate({ email: form.email, password: form.password });
     }
+  };
+
+  const handleResetPassword = () => {
+    navigation.replace("resetPassword");
   };
 
   return (
@@ -92,7 +101,7 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
             keyboardType={"email-address"}
             autoCorrect={false}
           />
-          {!isLogin && (
+          {!isResetPassword && !isLogin && (
             <AppInput
               label={"Confirm Email"}
               isError={!form.confirmEmailISVALID}
@@ -103,15 +112,22 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
               autoCorrect={false}
             />
           )}
-          <AppInput
-            label={"Password"}
-            isError={!form.passwordISVALID}
-            value={form.password}
-            onChangeText={handleInputChange.bind(this, "password")}
-            autoCapitalize={"none"}
-            autoCorrect={false}
-          />
-          {!isLogin && (
+          {!isResetPassword && (
+            <AppInput
+              label={"Password"}
+              isError={!form.passwordISVALID}
+              value={form.password}
+              onChangeText={handleInputChange.bind(this, "password")}
+              autoCapitalize={"none"}
+              autoCorrect={false}
+            />
+          )}
+          {isLogin && (
+            <FlatButton onPress={handleResetPassword}>
+              Reset Password
+            </FlatButton>
+          )}
+          {!isResetPassword && !isLogin && (
             <AppInput
               label={"Confirm Password"}
               isError={!form.confirmPasswordISVALID}
@@ -124,7 +140,7 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
         </View>
         <View style={styles.btnContainer}>
           <AppButton onPress={handleConfirmAuth}>
-            {isLogin ? "Login" : "Sign Up"}
+            {isLogin ? "Login" : isResetPassword ? "Reset Password" : "Sign Up"}
           </AppButton>
           <FlatButton onPress={handleSwapAuthenticationScreen}>
             {isLogin ? "Create a new account" : "Log in instead"}
@@ -146,6 +162,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#00000027",
     padding: 15,
   },
-  inputsContainer: {},
-  btnContainer: {},
 });

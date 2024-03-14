@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../../authentication/LoginScreen";
 import SignUpScreen from "../../authentication/SignUpScreen";
 import { Colors } from "../../../config/colors/Colors";
+import ResetPasswordScreen from "../../authentication/ResetPasswordScreen";
 const Stack = createNativeStackNavigator();
 
 export default function AuthStack() {
@@ -12,7 +13,7 @@ export default function AuthStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        animation:"none"
+        animation: "none",
       }}
     >
       <Stack.Screen
@@ -25,6 +26,7 @@ export default function AuthStack() {
         component={SignUpScreen}
         options={{ title: "SignUp" }}
       />
+      <Stack.Screen name="resetPassword" component={ResetPasswordScreen} />
     </Stack.Navigator>
   );
 }

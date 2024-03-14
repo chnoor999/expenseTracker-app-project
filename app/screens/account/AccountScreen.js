@@ -29,7 +29,7 @@ export default function AccountScreen() {
   };
 
   if (isLoading) {
-    return <LoadingOverlay />;
+    return <LoadingOverlay message={"Logging out"} />;
   }
 
   return (

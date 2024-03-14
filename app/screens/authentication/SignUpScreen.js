@@ -14,8 +14,13 @@ export default function SignUpScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleTryAgain = () => {
-    setError("");
+  const handleTryAgain =async () => {
+    try{
+
+      await setError("");
+    }catch(error){
+      console.log(error)
+    }
   };
 
   const handleSignup = async ({ email, password }) => {
@@ -34,8 +39,9 @@ export default function SignUpScreen() {
           setError(
             "This email is already in use. Please use a different email."
           );
+          break
         default:
-          setError("An unexpected error occurred during login:", error.message);
+          setError("An unexpected error occurred during login");
       }
       setIsLoading(false);
     }
@@ -46,7 +52,7 @@ export default function SignUpScreen() {
   }
 
   if (isLoading) {
-    return <LoadingOverLay />;
+    return <LoadingOverLay message={"Signing up"} />;
   }
 
   return <AuthContent onAuthanticate={handleSignup} />;

@@ -96,7 +96,7 @@ export default function AllExpense() {
   }
 
   if (!isFetched) {
-    return <LoadingOverLay />;
+    return <LoadingOverLay/>;
   }
 
   return (

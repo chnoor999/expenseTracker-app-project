@@ -2,11 +2,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Colors } from "../../config/colors/Colors";
 
-export default function FlatButton({ children, onPress }) {
+export default function FlatButton({ children, onPress ,style}) {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      style={styles.container}
+      style={[styles.container,style]}
       onPress={onPress}
     >
       <Text style={styles.text}>{children}</Text>

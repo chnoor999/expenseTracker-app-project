@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 import AuthContent from "../../components/auth/AuthContent";
-import { Authlogin } from "../../hooks/auth";
+import { Authlogin} from "../../hooks/auth";
 import { useAuthContext } from "../../store/Auth-Context";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
@@ -37,7 +37,7 @@ export default function LoginScreen() {
           setError("Your account has been disabled.");
           break;
         default:
-          setError("An unexpected error occurred during login:", error.message);
+          setError("An unexpected error occurred during login");
       }
       setIsLoading(false);
     }
@@ -50,7 +50,7 @@ export default function LoginScreen() {
   if (isLoading) {
     return (
       <>
-        <LoadingOverLay />
+        <LoadingOverLay message={"Logging in"}/>
       </>
     );
   }

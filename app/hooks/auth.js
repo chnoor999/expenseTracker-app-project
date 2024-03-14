@@ -27,3 +27,15 @@ export const Authlogin = async ({ email, password }) => {
 
   return respoense.data;
 };
+
+export const resetPassword = async ({ email }) => {
+    const respoense = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${key}`,
+      {
+        email,
+        requestType: "PASSWORD_RESET",
+      }
+    );
+
+    return respoense.data
+};
