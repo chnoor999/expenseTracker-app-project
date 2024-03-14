@@ -10,6 +10,7 @@ import IconButton from "../../../components/UI/IconButton";
 // screens
 import AllExpense from "../../expenseScreens/AllExpense";
 import RecentExpense from "../../expenseScreens/RecentExpense";
+import AccountScreen from "../../account/AccountScreen";
 
 export default function ExpenseTab() {
   const navigation = useNavigation();
@@ -55,6 +56,17 @@ export default function ExpenseTab() {
           tabBarIcon: ({ color }) => (
             <IconButton name={"hourglass-sharp"} color={color} size={24} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name="account"
+        component={AccountScreen}
+        options={{
+          title: "Account",
+          tabBarIcon: ({ color }) => (
+            <IconButton name={"person"} color={color} size={24} />
+          ),
+          headerRight: false,
         }}
       />
     </Tab.Navigator>

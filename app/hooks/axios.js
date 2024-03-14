@@ -4,14 +4,19 @@ import axios from "axios";
 const BASEURL = "https://expensetracker-7c464-default-rtdb.firebaseio.com";
 
 // this hook post an expense
-export const postExpense = async (expenseData) => {
-  const id = await axios.post(BASEURL + `/expense.json`, expenseData);
+export const postExpense = async (token, userUid, expenseData) => {
+  const id = await axios.post(
+    BASEURL + `/expense/${userUid}.json?auth=${token}`,
+    expenseData
+  );
   return id.data.name;
 };
 
 // this hook get an expenses
-export const getExpense = async () => {
-  const response = await axios.get(BASEURL + "/expense.json");
+export const getExpense = async (token, userUid) => {
+  const response = await axios.get(
+    BASEURL + `/expense/${userUid}.json?auth=${token}`
+  );
 
   const arr = [];
   for (const key in response.data) {
@@ -25,11 +30,14 @@ export const getExpense = async () => {
 };
 
 // hook for edit an expense
-export const editExpense = async (id, expenseData) => {
-  return axios.put(BASEURL + `/expense/${id}.json`, expenseData);
+export const editExpense = async (token, userUid, id, expenseData) => {
+  return axios.put(
+    BASEURL + `/expense/${userUid}/${id}.json?auth=${token}`,
+    expenseData
+  );
 };
 
 // hook for delete an expense
-export const delExpense = async (id) => {
-  return axios.delete(BASEURL + `/expense/${id}.json`);
+export const delExpense = async (token, userUid, id) => {
+  return axios.delete(BASEURL + `/expense/${userUid}/${id}.json?auth=${token}`);
 };

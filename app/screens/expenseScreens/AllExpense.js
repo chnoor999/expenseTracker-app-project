@@ -14,9 +14,12 @@ import { Pressable } from "react-native";
 import { getExpense } from "../../hooks/axios";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
+import { useAuthContext } from "../../store/Auth-Context";
 
 export default function AllExpense() {
   const { data, set } = useExpenseContext();
+  const { token, userUid } = useAuthContext();
+
   const [DATATOSHOW, setDATATOSHOW] = useState(data);
 
   useEffect(() => {
@@ -70,8 +73,8 @@ export default function AllExpense() {
   useEffect(() => {
     (async () => {
       try {
-        setError(null)
-        const data = await getExpense();
+        setError(null);
+        const data = await getExpense(token, userUid);
         const arr = [];
         for (const key in data) {
           const obj = {
@@ -83,12 +86,10 @@ export default function AllExpense() {
         set(arr.reverse());
         setIsFetched(true);
       } catch (error) {
-        setError(
-          "Failed to fetch expenses try again later."
-        );
+        setError("Failed to fetch expenses try again later.");
       }
     })();
-  }, []);
+  }, [token, userUid]);
 
   if (!isFetched && error?.length) {
     return <ErrorOverlay message={error} />;

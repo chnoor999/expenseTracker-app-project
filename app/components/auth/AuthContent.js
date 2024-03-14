@@ -74,7 +74,6 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
         };
       });
     } else {
-      console.log("ok");
       onAuthanticate({ email: form.email, password: form.password });
     }
   };
@@ -89,6 +88,9 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
             isError={!form.emailISVALID}
             value={form.email}
             onChangeText={handleInputChange.bind(this, "email")}
+            autoCapitalize={"none"}
+            keyboardType={"email-address"}
+            autoCorrect={false}
           />
           {!isLogin && (
             <AppInput
@@ -96,6 +98,9 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
               isError={!form.confirmEmailISVALID}
               value={form.confirmEmail}
               onChangeText={handleInputChange.bind(this, "confirmEmail")}
+              autoCapitalize={"none"}
+              keyboardType={"email-address"}
+              autoCorrect={false}
             />
           )}
           <AppInput
@@ -103,6 +108,8 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
             isError={!form.passwordISVALID}
             value={form.password}
             onChangeText={handleInputChange.bind(this, "password")}
+            autoCapitalize={"none"}
+            autoCorrect={false}
           />
           {!isLogin && (
             <AppInput
@@ -110,6 +117,8 @@ export default function AuthContent({ isLogin, onAuthanticate }) {
               isError={!form.confirmPasswordISVALID}
               value={form.confirmPassword}
               onChangeText={handleInputChange.bind(this, "confirmPassword")}
+              autoCapitalize={"none"}
+              autoCorrect={false}
             />
           )}
         </View>

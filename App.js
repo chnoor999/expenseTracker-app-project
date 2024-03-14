@@ -1,11 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
 import { ExpenseContextProvider } from "./app/store/Expense-Context";
+import { AuthContextProvider, useAuthContext } from "./app/store/Auth-Context";
 import { useFonts } from "expo-font";
-import NetInfo from "@react-native-community/netinfo";
 import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
+import NetInfo from "@react-native-community/netinfo";
 import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack";
+import LoadingOverLay from "./app/components/UI/LoadingOverLay";
+
+const Root = () => {
+  const { isAuthenticated, addToken, addUserId, addUserEmail } =
+    useAuthContext();
+
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const userUid = await AsyncStorage.getItem("userUid");
+        const userEmail = await AsyncStorage.getItem("userEmail");
+        if (token && userUid && userEmail) {
+          addToken(token);
+          addUserId(userUid);
+          addUserEmail(userEmail);
+        }
+        setAppIsReady(true);
+      } catch (error) {
+        alert(error);
+      }
+    })();
+  }, []);
+
+  if (!appIsReady) {
+    return <LoadingOverLay />;
+  }
+
+  return (
+    <NavigationContainer>
+      {isAuthenticated ? <ExpenseStack /> : <AuthStack />}
+    </NavigationContainer>
+  );
+};
 
 export default function App() {
   useEffect(() => {
@@ -36,10 +75,9 @@ export default function App() {
 
   return (
     <ExpenseContextProvider>
-      <NavigationContainer>
-        {/* <ExpenseStack /> */}
-        <AuthStack />
-      </NavigationContainer>
+      <AuthContextProvider>
+        <Root />
+      </AuthContextProvider>
     </ExpenseContextProvider>
   );
 }

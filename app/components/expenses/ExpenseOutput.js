@@ -10,6 +10,7 @@ import ExpenseSummary from "./ExpenseSummary";
 import DeleteBox from "../UI/DeleteBox";
 import { delExpense } from "../../hooks/axios";
 import ErrorOverlay from "../UI/ErrorOverlay";
+import { useAuthContext } from "../../store/Auth-Context";
 
 export default function ExpenseOutput({
   expensePeriod,
@@ -18,6 +19,7 @@ export default function ExpenseOutput({
   swapButton,
 }) {
   const { deleteExpense } = useExpenseContext();
+  const { token, userUid } = useAuthContext();
 
   // delete the expense on long press
   const [deleteBox, setDeletebox] = useState(false);
@@ -32,7 +34,7 @@ export default function ExpenseOutput({
 
   const onDelete = async () => {
     try {
-      await delExpense(deletedID);
+      await delExpense(token, userUid, deletedID);
       deleteExpense(deletedID);
       setDeletebox(false);
       setdeletedID(null);

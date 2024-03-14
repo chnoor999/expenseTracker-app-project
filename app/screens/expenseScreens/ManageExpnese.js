@@ -9,6 +9,7 @@ import { useExpenseContext } from "../../store/Expense-Context";
 import { delExpense } from "../../hooks/axios";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 import LoadingOverlay from "../../components/UI/LoadingOverLay";
+import { useAuthContext } from "../../store/Auth-Context";
 
 export default function ManageExpnese({ route, navigation }) {
   // id of expense object that want to edit
@@ -17,6 +18,7 @@ export default function ManageExpnese({ route, navigation }) {
   const isEditing = !!editID;
 
   const { deleteExpense } = useExpenseContext();
+  const { token, userUid } = useAuthContext();
 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +27,7 @@ export default function ManageExpnese({ route, navigation }) {
   const handleDelete = async () => {
     try {
       setIsLoading(true);
-      await delExpense(editID);
+      await delExpense(token, userUid, editID);
       deleteExpense(editID);
       navigation.goBack();
     } catch (error) {

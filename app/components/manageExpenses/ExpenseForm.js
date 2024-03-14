@@ -12,14 +12,16 @@ import AppButton from "../UI/AppButton";
 import Logo from "./Logo";
 import { editExpense, postExpense } from "../../hooks/axios";
 import ErrorOverlay from "../UI/ErrorOverlay";
-import LoadingOverlay from "../UI/LoadingOverLay"
+import LoadingOverlay from "../UI/LoadingOverLay";
+import { useAuthContext } from "../../store/Auth-Context";
 
 export default function ExpenseForm({ isEditing, editID }) {
   const navigation = useNavigation();
   const { data, edit, add } = useExpenseContext();
+  const { token, userUid } = useAuthContext();
 
   const [error, setError] = useState();
-  const [isLoading,setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   //finding data of editabele expense
   const editabeleExpense = data.find((item) => item.id == editID);
@@ -72,17 +74,17 @@ export default function ExpenseForm({ isEditing, editID }) {
     } else {
       if (isEditing) {
         try {
-          setIsLoading(true)
+          setIsLoading(true);
+          await editExpense(token, userUid, editID, object);
           edit(editID, object);
-          await editExpense(editID, object);
           navigation.goBack();
         } catch (error) {
           setError("Failed to edit expense try again later.");
         }
       } else {
         try {
-          setIsLoading(true)
-          const id = await postExpense(object);
+          setIsLoading(true);
+          const id = await postExpense(token, userUid, object);
           add({ ...object, id });
           navigation.goBack();
         } catch (error) {
@@ -100,8 +102,8 @@ export default function ExpenseForm({ isEditing, editID }) {
     return <ErrorOverlay message={error} />;
   }
 
-  if(isLoading){
-    return <LoadingOverlay />
+  if (isLoading) {
+    return <LoadingOverlay />;
   }
 
   return (
