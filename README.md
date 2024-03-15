@@ -35,3 +35,8 @@ App being managed by the Context API
 
 Custom Fonts:
 The app utilizes custom fonts.using useFonts
+
+Firebase Integration:
+Expenses are stored in Firebase Realtime Database.
+Authentication feature implemented using Firebase Authentication with email and password.
+Password reset functionality included for users to reset their passwords securely.
