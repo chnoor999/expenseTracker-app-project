@@ -12,8 +12,14 @@ import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack
 import LoadingOverLay from "./app/components/UI/LoadingOverLay";
 
 const Root = () => {
-  const { isAuthenticated, addToken, addUserId, addUserEmail } =
-    useAuthContext();
+  const {
+    isAuthenticated,
+    addToken,
+    addUserId,
+    addUserEmail,
+    expiredTime,
+    addExpiredTime,
+  } = useAuthContext();
 
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -23,10 +29,12 @@ const Root = () => {
         const token = await AsyncStorage.getItem("token");
         const userUid = await AsyncStorage.getItem("userUid");
         const userEmail = await AsyncStorage.getItem("userEmail");
-        if (token && userUid && userEmail) {
+        const expiredIn = await AsyncStorage.getItem("expiredIn");
+        if (token && userUid && userEmail && expiredIn) {
           addToken(token);
           addUserId(userUid);
           addUserEmail(userEmail);
+          addExpiredTime(JSON.parse(expiredIn));
         }
         setAppIsReady(true);
       } catch (error) {
@@ -34,6 +42,17 @@ const Root = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (expiredTime) {
+      const now = Date.now();
+      const isExpired = now >= expiredTime;
+
+      if (isExpired) {
+        alert("Session Expired");
+      }
+    }
+  }, [expiredTime]);
 
   if (!appIsReady) {
     return <LoadingOverLay />;

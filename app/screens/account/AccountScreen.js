@@ -8,7 +8,13 @@ import LogOut from "../../components/account/LogOut";
 import LoadingOverlay from "../../components/UI/LoadingOverLay";
 
 export default function AccountScreen() {
-  const { removeToken, removeUserId, userEmail } = useAuthContext();
+  const {
+    removeToken,
+    removeUserId,
+    userEmail,
+    removeUserEmail,
+    removeExpiredTime,
+  } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = () => {
@@ -23,6 +29,8 @@ export default function AccountScreen() {
           setIsLoading(true);
           await removeToken();
           await removeUserId();
+          await removeExpiredTime();
+          await removeUserEmail();
         },
       },
     ]);

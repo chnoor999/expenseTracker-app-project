@@ -8,28 +8,27 @@ import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function SignUpScreen() {
-  const { addToken, addUserId, addUserEmail } = useAuthContext();
+  const { addToken, addUserId, addUserEmail, addExpiredTime } =
+    useAuthContext();
 
   // state for loading
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleTryAgain =async () => {
-    try{
-
-      await setError("");
-    }catch(error){
-      console.log(error)
-    }
+  const handleTryAgain = () => {
+    setError("");
   };
 
   const handleSignup = async ({ email, password }) => {
+    const timeOfExpire = Date.now() + 3600 * 1000;
+
     try {
       setIsLoading(true);
       const data = await AuthSignup({ email, password });
       addToken(data.idToken);
       addUserId(data.localId);
       addUserEmail(data.email);
+      addExpiredTime(timeOfExpire);
     } catch (error) {
       switch (error.response.data.error.message) {
         case "TOO_MANY_ATTEMPTS_TRY_LATER":
@@ -39,7 +38,7 @@ export default function SignUpScreen() {
           setError(
             "This email is already in use. Please use a different email."
           );
-          break
+          break;
         default:
           setError("An unexpected error occurred during login");
       }
