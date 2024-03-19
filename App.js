@@ -56,10 +56,14 @@ const Root = () => {
       if (isExpired) {
         if (refreshToken) {
           (async () => {
-            const timeOfExpire = Date.now() + 3600 * 1000;
-            const data = await exchangeToken(refreshToken);
-            addToken(data.id_token);
-            addExpiredTime(timeOfExpire);
+            try {
+              const timeOfExpire = Date.now() + 3600 * 1000;
+              const data = await exchangeToken(refreshToken);
+              addToken(data.id_token);
+              addExpiredTime(timeOfExpire);
+            } catch (error) {
+              alert("Error Occurred Try Agian");
+            }
           })();
         }
       }
