@@ -8,7 +8,7 @@ import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function LoginScreen() {
-  const { addToken, addUserId, addUserEmail, addExpiredTime } =
+  const { addToken, addUserId, addUserEmail, addExpiredTime, addRefreshToken } =
     useAuthContext();
 
   // state for loading
@@ -29,6 +29,7 @@ export default function LoginScreen() {
       addUserId(data.localId);
       addUserEmail(data.email);
       addExpiredTime(timeOfExpire);
+      addRefreshToken(data.refreshToken);
     } catch (error) {
       switch (error.response.data.error.message) {
         case "INVALID_LOGIN_CREDENTIALS":

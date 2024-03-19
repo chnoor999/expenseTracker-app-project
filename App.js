@@ -10,6 +10,7 @@ import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseS
 import NetInfo from "@react-native-community/netinfo";
 import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack";
 import LoadingOverLay from "./app/components/UI/LoadingOverLay";
+import { exchangeToken } from "./app/hooks/auth";
 
 const Root = () => {
   const {
@@ -19,6 +20,8 @@ const Root = () => {
     addUserEmail,
     expiredTime,
     addExpiredTime,
+    addRefreshToken,
+    refreshToken,
   } = useAuthContext();
 
   const [appIsReady, setAppIsReady] = useState(false);
@@ -30,11 +33,13 @@ const Root = () => {
         const userUid = await AsyncStorage.getItem("userUid");
         const userEmail = await AsyncStorage.getItem("userEmail");
         const expiredIn = await AsyncStorage.getItem("expiredIn");
-        if (token && userUid && userEmail && expiredIn) {
+        const refreshToken = await AsyncStorage.getItem("refreshToken");
+        if (token && userUid && userEmail && expiredIn && refreshToken) {
           addToken(token);
           addUserId(userUid);
           addUserEmail(userEmail);
           addExpiredTime(JSON.parse(expiredIn));
+          addRefreshToken(refreshToken);
         }
         setAppIsReady(true);
       } catch (error) {
@@ -43,16 +48,23 @@ const Root = () => {
     })();
   }, []);
 
+  const now = Date.now();
+  const isExpired = now >= expiredTime;
+
   useEffect(() => {
     if (expiredTime) {
-      const now = Date.now();
-      const isExpired = now >= expiredTime;
-
       if (isExpired) {
-        alert("Session Expired");
+        if (refreshToken) {
+          (async () => {
+            const timeOfExpire = Date.now() + 3600 * 1000;
+            const data = await exchangeToken(refreshToken);
+            addToken(data.id_token);
+            addExpiredTime(timeOfExpire);
+          })();
+        }
       }
     }
-  }, [expiredTime]);
+  }, [expiredTime, refreshToken, isExpired]);
 
   if (!appIsReady) {
     return <LoadingOverLay />;

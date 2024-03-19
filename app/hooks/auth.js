@@ -29,13 +29,25 @@ export const Authlogin = async ({ email, password }) => {
 };
 
 export const resetPassword = async ({ email }) => {
-    const respoense = await axios.post(
-      `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${key}`,
-      {
-        email,
-        requestType: "PASSWORD_RESET",
-      }
-    );
+  const respoense = await axios.post(
+    `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${key}`,
+    {
+      email,
+      requestType: "PASSWORD_RESET",
+    }
+  );
 
-    return respoense.data
+  return respoense.data;
+};
+
+export const exchangeToken = async (refreshToken) => {
+  const response = await axios.post(
+    `https://securetoken.googleapis.com/v1/token?key=${key}`,
+    {
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }
+  );
+
+  return response.data;
 };

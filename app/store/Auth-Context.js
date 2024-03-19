@@ -6,8 +6,11 @@ const AuthContext = createContext({
   userUid: "",
   userEmail: "",
   expiredTime: "",
+  refreshToken: "",
+  addRefreshToken: () => {},
+  removeRefreshToken: () => {},
   addExpiredTime: () => {},
-  removeExpiredTime:()=>{},
+  removeExpiredTime: () => {},
   addToken: () => {},
   removeToken: () => {},
   addUserId: () => {},
@@ -22,6 +25,7 @@ export const AuthContextProvider = ({ children }) => {
   const [userUid, setUserUid] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [expiredTime, setExpiredTime] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
 
   const addToken = (a) => {
     setToken(a);
@@ -59,11 +63,23 @@ export const AuthContextProvider = ({ children }) => {
     setExpiredTime("");
   };
 
+  const addRefreshToken = async (a) => {
+    await AsyncStorage.setItem("refreshToken", a);
+    setRefreshToken(a);
+  };
+  const removeRefreshToken = async () => {
+    await AsyncStorage.removeItem("refreshToken");
+    setRefreshToken("");
+  };
+
   const value = {
     token,
     userUid,
     userEmail,
     expiredTime,
+    refreshToken,
+    addRefreshToken,
+    removeRefreshToken,
     addExpiredTime,
     removeExpiredTime,
     addToken,

@@ -8,7 +8,7 @@ import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function SignUpScreen() {
-  const { addToken, addUserId, addUserEmail, addExpiredTime } =
+  const { addToken, addUserId, addUserEmail, addExpiredTime,addRefreshToken } =
     useAuthContext();
 
   // state for loading
@@ -29,6 +29,7 @@ export default function SignUpScreen() {
       addUserId(data.localId);
       addUserEmail(data.email);
       addExpiredTime(timeOfExpire);
+      addExpiredTime(data.refreshToken)
     } catch (error) {
       switch (error.response.data.error.message) {
         case "TOO_MANY_ATTEMPTS_TRY_LATER":
