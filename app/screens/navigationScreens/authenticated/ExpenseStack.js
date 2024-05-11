@@ -1,10 +1,10 @@
-// navigation
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Colors } from "../../../config/colors/Colors";
+
 const Stack = createNativeStackNavigator();
-// screens
 import ManageExpense from "../../expenseScreens/ManageExpnese";
 import ExpenseTab from "./ExpenseTab";
-import { Colors } from "../../../config/colors/Colors";
+import DeleteBox from "../../../components/UI/DeleteBox";
 
 export default function ExpenseStack() {
   return (
@@ -22,6 +22,15 @@ export default function ExpenseStack() {
         }}
       />
       <Stack.Screen name="manageExpense" component={ManageExpense} />
+      <Stack.Screen
+        name="deleteBox"
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "fade",
+        }}
+        component={DeleteBox}
+      />
     </Stack.Navigator>
   );
 }

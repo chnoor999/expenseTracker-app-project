@@ -6,11 +6,12 @@ import { useNavigation } from "@react-navigation/native";
 // constant colors
 import { Colors } from "../../../config/colors/Colors";
 // icons
-import IconButton from "../../../components/UI/IconButton";
+import Icons from "../../../components/UI/Icons";
 // screens
 import AllExpense from "../../expenseScreens/AllExpense";
 import RecentExpense from "../../expenseScreens/RecentExpense";
 import AccountScreen from "../../account/AccountScreen";
+import ButtonWithIcon from "../../../components/UI/ButtonWithIcon";
 
 export default function ExpenseTab() {
   const navigation = useNavigation();
@@ -27,15 +28,6 @@ export default function ExpenseTab() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors.green100,
         tabBarInactiveTintColor: Colors.green800,
-        headerRight: () => (
-          <IconButton
-            style={styles.icon}
-            name={"add"}
-            size={28}
-            color={Colors.green100}
-            onPress={addHandler}
-          />
-        ),
       }}
     >
       <Tab.Screen
@@ -44,7 +36,15 @@ export default function ExpenseTab() {
         options={{
           headerTitle: "All Expenses",
           tabBarIcon: ({ color }) => (
-            <IconButton name={"calendar"} color={color} size={24} />
+            <Icons name={"calendar"} color={color} size={24} />
+          ),
+          headerRight: () => (
+            <ButtonWithIcon
+              name={"add"}
+              size={28}
+              color={Colors.green100}
+              onPress={addHandler}
+            />
           ),
         }}
       />
@@ -54,7 +54,7 @@ export default function ExpenseTab() {
         options={{
           headerTitle: "Recent Expenses",
           tabBarIcon: ({ color }) => (
-            <IconButton name={"hourglass-sharp"} color={color} size={24} />
+            <Icons name={"hourglass-sharp"} color={color} size={24} />
           ),
         }}
       />
@@ -64,7 +64,7 @@ export default function ExpenseTab() {
         options={{
           title: "Account",
           tabBarIcon: ({ color }) => (
-            <IconButton name={"person"} color={color} size={24} />
+            <Icons name={"person"} color={color} size={24} />
           ),
           headerRight: false,
         }}
@@ -73,14 +73,4 @@ export default function ExpenseTab() {
   );
 }
 
-const styles = StyleSheet.create({
-  icon: {
-    marginHorizontal: 13,
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 4,
-    backgroundColor: Colors.green700,
-  },
-});
+const styles = StyleSheet.create({});

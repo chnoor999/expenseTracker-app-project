@@ -6,9 +6,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const ErrorOverlay = ({ message, onTryAgain }) => {
+const ErrorOverlay = ({ message, onTryAgain, style }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.text}>{message}</Text>
       {onTryAgain && (
         <TouchableOpacity
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#ffffff6f",
     fontSize: hp(1.8),
+    textAlign:"center"
   },
   tryAgainContainer: {
     backgroundColor: Colors.green700,

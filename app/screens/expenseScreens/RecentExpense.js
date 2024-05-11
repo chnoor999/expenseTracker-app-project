@@ -30,16 +30,14 @@ export default function RecentExpense() {
       expenseData={recentData}
       expensePeriod={`Last ${daysAgo} Days`}
       emptyText={"No recent expenses recorded."}
-      swapButton={
-        <FontAwesome
-          onPress={toggleDaysAgo}
-          name="exchange"
-          size={16}
-          color={Colors.green700}
-          style={{ width: 30, textAlign: "center" }}
-        />
-      }
+      // swapButton={
+      //   <FontAwesome
+      //     onPress={toggleDaysAgo}
+      //     name="exchange"
+      //     size={16}
+      //     color={Colors.green700}
+      //   />
+      // }
     />
   );
 }
-

@@ -1,54 +1,23 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
-// constant colors
+import { FlatList, StyleSheet, View } from "react-native";
+import { memo, useCallback } from "react";
 import { Colors } from "../../config/colors/Colors";
-// context
-import { useExpenseContext } from "../../store/Expense-Context";
-// component
+import { useNavigation } from "@react-navigation/native";
+
 import ExpenseList from "./ExpenseList";
 import ExpenseSummary from "./ExpenseSummary";
-import DeleteBox from "../UI/DeleteBox";
-import { delExpense } from "../../hooks/axios";
 import ErrorOverlay from "../UI/ErrorOverlay";
-import { useAuthContext } from "../../store/Auth-Context";
 
-export default function ExpenseOutput({
+const ExpenseOutput = ({
   expensePeriod,
   expenseData,
   emptyText,
   swapButton,
-}) {
-  const { deleteExpense } = useExpenseContext();
-  const { token, userUid } = useAuthContext();
+}) => {
+  const navigation = useNavigation();
 
-  // delete the expense on long press
-  const [deleteBox, setDeletebox] = useState(false);
-  const [deletedID, setdeletedID] = useState();
-
-  const handleDeleteExpense = (id) => {
-    setDeletebox(true);
-    setdeletedID(id);
-  };
-
-  const [error, setError] = useState();
-
-  const onDelete = async () => {
-    try {
-      await delExpense(token, userUid, deletedID);
-      deleteExpense(deletedID);
-      setDeletebox(false);
-      setdeletedID(null);
-    } catch (error) {
-      setError("Failed to delete expense try again later.");
-    }
-  };
-  const onCancel = () => {
-    setDeletebox(false);
-  };
-
-  if (!!error) {
-    return <ErrorOverlay message={error} />;
-  }
+  const onListLongPressHandler = useCallback((id) => {
+    navigation.navigate("deleteBox", { id });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,40 +29,26 @@ export default function ExpenseOutput({
       {expenseData.length ? (
         <FlatList
           data={expenseData}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <ExpenseList
-              onLongPress={handleDeleteExpense.bind(this, item.id)}
-              id={item.id}
-              description={item.description}
-              amount={item.amount}
-              date={item.date}
+              onLongPress={() => onListLongPressHandler(item.id)}
+              item={item}
             />
           )}
         />
       ) : (
-        <View style={styles.innerContainer}>
-          <Text style={styles.text}>{emptyText}</Text>
-        </View>
+        <ErrorOverlay message={emptyText} />
       )}
-
-      <DeleteBox visible={deleteBox} onCancel={onCancel} onDelete={onDelete} />
     </View>
   );
-}
+};
+
+export default memo(ExpenseOutput);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green800,
-  },
-  innerContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    color: "#ffffff4b",
-    fontSize: 14,
-    textTransform: "capitalize",
   },
 });

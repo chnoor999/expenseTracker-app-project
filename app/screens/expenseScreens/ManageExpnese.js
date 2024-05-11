@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 // component
 import ExpenseForm from "../../components/manageExpenses/ExpenseForm";
-import IconButton from "../../components/UI/IconButton";
+import IconButton from "../../components/UI/Icons";
 // constant color
 import { Colors } from "../../config/colors/Colors";
 // context

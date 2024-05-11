@@ -4,23 +4,22 @@ import { useExpenseContext } from "../../store/Expense-Context";
 import { Colors } from "../../config/colors/Colors";
 import { getExpense } from "../../hooks/axios";
 import { useAuthContext } from "../../store/Auth-Context";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-import IconButton from "../../components/UI/IconButton";
+import IconButton from "../../components/UI/Icons";
 import FilterBox from "../../components/UI/FilterBox";
 import ExpenseOutput from "../../components/expenses/ExpenseOutput";
 import Dot from "../../components/UI/Dot";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
+import ButtonWithIcon from "../../components/UI/ButtonWithIcon";
 
 export default function AllExpense() {
   const { data, set } = useExpenseContext();
   const { token, userUid } = useAuthContext();
-
-  const [DATATOSHOW, setDATATOSHOW] = useState(data);
-
-  useEffect(() => {
-    setDATATOSHOW(data);
-  }, [data]);
 
   // state for filter box visible or not
   const [filterVisible, setFilterVisible] = useState(false);
@@ -38,9 +37,6 @@ export default function AllExpense() {
   // function for box filter cancel
   const onCancel = () => {
     setFilterVisible(false);
-    setDate((prev) => ({ ...prev, value: "" }));
-    setDATATOSHOW(data);
-    setDate((pre) => ({ ...pre, isValid: true }));
   };
 
   const onApply = () => {
@@ -62,6 +58,7 @@ export default function AllExpense() {
       setDate((pre) => ({ ...pre, isValid: false }));
     }
   };
+
   const [isFetched, setIsFetched] = useState(false);
   const [error, setError] = useState();
 
@@ -99,19 +96,24 @@ export default function AllExpense() {
     <>
       <ExpenseOutput
         swapButton={
-          <Pressable onPress={handleFilter} style={{ paddingHorizontal: 8 }}>
-            <IconButton
-              name={"filter-sharp"}
-              size={18}
-              color={Colors.green700}
-              style={{ width: 30, textAlign: "center", padding: 0 }}
-            />
-            {/* this custom dot is still over 
-            the filter button if the filter is appliead */}
-            {date.value && <Dot />}
-          </Pressable>
+          <ButtonWithIcon
+            name={"filter-sharp"}
+            size={hp(2)}
+            color={Colors.green700}
+            onPress={handleFilter}
+          />
+          // <Pressable onPress={handleFilter}>
+          //   <IconButton
+          //     name={"filter-sharp"}
+          //     size={16}
+          //     color={Colors.green700}
+          //   />
+          //   {/* this custom dot is still over
+          //   the filter button if the filter is appliead */}
+          //   {date.value && <Dot />}
+          // </Pressable>
         }
-        expenseData={DATATOSHOW}
+        expenseData={data}
         expensePeriod={"Total"}
         emptyText={
           date.value

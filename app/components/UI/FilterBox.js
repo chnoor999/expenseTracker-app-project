@@ -1,18 +1,16 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-// constant colors
+import { memo } from "react";
 import { Colors } from "../../config/colors/Colors";
-// component
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+
 import AppInput from "../manageExpenses/AppInput";
 
-export default function FilterBox({
-  visible,
-  onCancel,
-  onApply,
-  date,
-  handleDateChange,
-}) {
+const FilterBox = ({ visible, onCancel, onApply, date, handleDateChange }) => {
   return (
-    <Modal transparent={true} visible={visible} animationType="none">
+    <Modal transparent={true} visible={visible} animationType="fade">
       <View style={styles.container}>
         <View style={styles.box}>
           <View>
@@ -32,10 +30,10 @@ export default function FilterBox({
             />
           </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={onCancel}>
+            <TouchableOpacity style={styles.btn} onPress={onCancel}>
               <Text style={styles.cancel}>Remove</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={onApply}>
+            <TouchableOpacity style={styles.btn} onPress={onApply}>
               <Text style={styles.apply}>Apply</Text>
             </TouchableOpacity>
           </View>
@@ -43,7 +41,9 @@ export default function FilterBox({
       </View>
     </Modal>
   );
-}
+};
+
+export default memo(FilterBox);
 
 const styles = StyleSheet.create({
   container: {
@@ -54,22 +54,23 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: Colors.green900,
     borderRadius: 6,
-    width: 250,
-    padding: 10,
-    paddingHorizontal: 15,
     justifyContent: "center",
-    elevation: 4,
-    shadowColor: "#000",
+    alignItems: "center",
+    width: wp(80),
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(2),
   },
   text: {
-    paddingVertical: 10,
     textAlign: "center",
     lineHeight: 20,
     color: "#fff",
+    fontSize: hp(1.85),
+    marginTop: hp(1),
   },
   input: {
     alignSelf: "center",
-    marginVertical: 10,
+    marginVertical: hp(1),
+    fontSize: hp(2.4),
   },
   inputError: {
     backgroundColor: "#f7b4a8",
@@ -77,20 +78,21 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: "row",
     borderTopWidth: 1,
+    borderColor: "#ffffff30",
+    gap: wp(1.5),
+  },
+  btn: {
+    flex: 1,
     alignItems: "center",
-    justifyContent: "space-evenly",
-    borderColor: "#ffffff14",
+    justifyContent: "center",
+    paddingVertical: hp(0.5),
   },
   cancel: {
     color: "#ffffffb7",
-    padding: 10,
-    minWidth:80,
-    textAlign:"center"
+    fontSize: hp(1.7),
   },
   apply: {
-    padding: 10,
     color: "#05a8ff",
-    minWidth:80,
-    textAlign:"center"
+    fontSize: hp(1.7),
   },
 });

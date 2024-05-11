@@ -1,23 +1,35 @@
 import { StyleSheet, Text, View } from "react-native";
-// constant color
+import { memo, useMemo } from "react";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function ExpenseSummary({ expensePeriod, expense, swapButton }) {
+const ExpenseSummary = ({ expensePeriod, expense, swapButton }) => {
   // sum of all expense
-  const totalSum = expense.reduce((sum, currentExpense) => {
-    return sum + currentExpense.amount;
-  }, 0);
+  const totalSum = useMemo(
+    () =>
+      expense.reduce((sum, currentExpense) => {
+        return sum + currentExpense.amount;
+      }, 0),
+    [expense]
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.summaryContainer}>
-        <Text style={styles.expensePeriod}>{expensePeriod}</Text>
+        <Text style={styles.txt}>{expensePeriod}</Text>
         {swapButton}
       </View>
-      <Text style={styles.totalAmount}>${totalSum.toFixed(2)}</Text>
+      <Text style={[styles.txt, styles.totalAmount]}>
+        ${totalSum.toFixed(2)}
+      </Text>
     </View>
   );
-}
+};
+
+export default memo(ExpenseSummary);
 
 const styles = StyleSheet.create({
   container: {
@@ -26,24 +38,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
-    marginVertical: 15,
-    marginHorizontal: 10,
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(1),
+    marginHorizontal: wp(2),
+    marginVertical: hp(1.5),
   },
   summaryContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 10,
   },
-  expensePeriod: {
-    fontSize: 16,
+  txt: {
     color: Colors.green700,
     fontFamily: "roboto",
+    fontSize: hp(1.9),
   },
   totalAmount: {
-    fontSize: 16,
-    color: Colors.green700,
     fontFamily: "robotoBold",
   },
 });

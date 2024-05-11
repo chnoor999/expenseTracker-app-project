@@ -6,9 +6,9 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const LoadingOverLay = ({ message = "Loading..." }) => {
+const LoadingOverLay = ({ message = "Loading...", style }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <ActivityIndicator size={hp(4.5)} color={"#fff"} />
       <Text style={styles.message}>{message}</Text>
     </View>

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import IconButton from "../UI/IconButton";
+import IconButton from "../UI/Icons";
 import { Colors } from "../../config/colors/Colors";
 
 export default function LogOut({ onPress }) {
