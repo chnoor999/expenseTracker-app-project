@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { ExpenseContextProvider } from "./app/store/Expense-Context";
 import { AuthContextProvider, useAuthContext } from "./app/store/Auth-Context";
 import { useFonts } from "expo-font";
 import { Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { exchangeToken } from "./app/hooks/auth";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
 import NetInfo from "@react-native-community/netinfo";
 import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack";
 import LoadingOverLay from "./app/components/UI/LoadingOverLay";
-import { exchangeToken } from "./app/hooks/auth";
 
 const Root = () => {
   const {

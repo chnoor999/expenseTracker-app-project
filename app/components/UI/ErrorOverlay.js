@@ -1,8 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { memo } from "react";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function ErrorOverlay({ message, onTryAgain }) {
+const ErrorOverlay = ({ message, onTryAgain }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{message}</Text>
@@ -17,7 +21,9 @@ export default function ErrorOverlay({ message, onTryAgain }) {
       )}
     </View>
   );
-}
+};
+
+export default memo(ErrorOverlay);
 
 const styles = StyleSheet.create({
   container: {
@@ -25,18 +31,21 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green800,
     alignItems: "center",
     justifyContent: "center",
+    gap: hp(1.5),
+    paddingHorizontal: wp(5),
   },
   text: {
-    color: "#ffffff4b",
+    color: "#ffffff6f",
+    fontSize: hp(1.8),
   },
   tryAgainContainer: {
-    margin: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
     backgroundColor: Colors.green700,
     borderRadius: 6,
+    paddingHorizontal: wp(6),
+    paddingVertical: hp(1),
   },
   tryAgain: {
     color: Colors.green100,
+    fontSize: hp(1.7),
   },
 });

@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { useCallback, useState } from "react";
+import { AuthLogin } from "../../hooks/auth";
+import { useAuthContext } from "../../store/Auth-Context";
 
 import AuthContent from "../../components/auth/AuthContent";
-import { Authlogin } from "../../hooks/auth";
-import { useAuthContext } from "../../store/Auth-Context";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
@@ -11,20 +10,19 @@ export default function LoginScreen() {
   const { addToken, addUserId, addUserEmail, addExpiredTime, addRefreshToken } =
     useAuthContext();
 
-  // state for loading
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleTryAgain = () => {
+  const handleTryAgain = useCallback(() => {
     setError("");
-  };
+  }, []);
 
-  const handleLogin = async ({ email, password }) => {
+  const handleLogin = useCallback(async ({ email, password }) => {
     const timeOfExpire = Date.now() + 3600 * 1000;
 
     try {
       setIsLoading(true);
-      const data = await Authlogin({ email, password });
+      const data = await AuthLogin({ email, password });
       addToken(data.idToken);
       addUserId(data.localId);
       addUserEmail(data.email);
@@ -46,21 +44,15 @@ export default function LoginScreen() {
       }
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  if (!!error) {
+  if (error) {
     return <ErrorOverlay message={error} onTryAgain={handleTryAgain} />;
   }
 
   if (isLoading) {
-    return (
-      <>
-        <LoadingOverLay message={"Logging in"} />
-      </>
-    );
+    return <LoadingOverLay message={"Logging in"} />;
   }
 
-  return <AuthContent isLogin onAuthanticate={handleLogin} />;
+  return <AuthContent isLogin onAuthenticate={handleLogin} />;
 }
-
-const styles = StyleSheet.create({});

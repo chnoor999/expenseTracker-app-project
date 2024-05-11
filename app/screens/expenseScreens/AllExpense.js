@@ -1,20 +1,16 @@
-import { useEffect, useState } from "react";
-// component
-import ExpenseOutput from "../../components/expenses/ExpenseOutput";
-// context
-import { useExpenseContext } from "../../store/Expense-Context";
-// constant color
-import { Colors } from "../../config/colors/Colors";
-//icons
-import IconButton from "../../components/UI/IconButton";
-// component
-import FilterBox from "../../components/UI/FilterBox";
-import Dot from "../../components/UI/Dot";
 import { Pressable } from "react-native";
+import { useEffect, useState } from "react";
+import { useExpenseContext } from "../../store/Expense-Context";
+import { Colors } from "../../config/colors/Colors";
 import { getExpense } from "../../hooks/axios";
+import { useAuthContext } from "../../store/Auth-Context";
+
+import IconButton from "../../components/UI/IconButton";
+import FilterBox from "../../components/UI/FilterBox";
+import ExpenseOutput from "../../components/expenses/ExpenseOutput";
+import Dot from "../../components/UI/Dot";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
-import { useAuthContext } from "../../store/Auth-Context";
 
 export default function AllExpense() {
   const { data, set } = useExpenseContext();
@@ -96,7 +92,7 @@ export default function AllExpense() {
   }
 
   if (!isFetched) {
-    return <LoadingOverLay/>;
+    return <LoadingOverLay />;
   }
 
   return (

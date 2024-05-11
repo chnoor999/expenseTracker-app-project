@@ -1,14 +1,12 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-// constant colors
+import { memo } from "react";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function AppInput({
-  containerStyle,
-  inputStyle,
-  label,
-  isError,
-  ...props
-}) {
+const AppInput = ({ containerStyle, inputStyle, label, isError, ...props }) => {
   return (
     <View style={[styles.container, containerStyle]}>
       {label ? (
@@ -16,29 +14,37 @@ export default function AppInput({
           {label} {<Text style={styles.error}>{isError ? "*" : null}</Text>}
         </Text>
       ) : null}
-      <TextInput style={[styles.input, inputStyle]} {...props} />
+      <TextInput
+        autoCapitalize={"none"}
+        autoCorrect={false}
+        style={[styles.input, inputStyle]}
+        {...props}
+      />
     </View>
   );
-}
+};
+
+export default memo(AppInput);
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 5,
-    marginBottom: 10,
+    marginBottom: hp(1),
   },
   label: {
-    fontSize: 14,
     color: Colors.green100,
-    marginBottom: 3,
+    fontSize: hp(1.65),
+    marginBottom: hp(0.5),
   },
   input: {
     backgroundColor: Colors.green100,
     borderRadius: 6,
-    fontSize: 20,
     color: Colors.green700,
-    padding: 10,
+    fontSize: hp(2.2),
+    paddingHorizontal: wp(2),
+    paddingVertical: hp(0.9),
   },
   error: {
     color: "tomato",
+    fontSize: hp(1.66),
   },
 });

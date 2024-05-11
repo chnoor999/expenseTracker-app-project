@@ -3,7 +3,7 @@ import axios from "axios";
 const key = "AIzaSyD_ylVOIox93V4TtC5iHsi2x_Q7V6wRM18";
 
 export const AuthSignup = async ({ email, password }) => {
-  const respoense = await axios.post(
+  const response = await axios.post(
     `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`,
     {
       email,
@@ -12,11 +12,11 @@ export const AuthSignup = async ({ email, password }) => {
     }
   );
 
-  return respoense.data;
+  return response.data;
 };
 
-export const Authlogin = async ({ email, password }) => {
-  const respoense = await axios.post(
+export const AuthLogin = async ({ email, password }) => {
+  const response = await axios.post(
     `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`,
     {
       email,
@@ -25,11 +25,11 @@ export const Authlogin = async ({ email, password }) => {
     }
   );
 
-  return respoense.data;
+  return response.data;
 };
 
 export const resetPassword = async ({ email }) => {
-  const respoense = await axios.post(
+  const response = await axios.post(
     `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${key}`,
     {
       email,
@@ -37,7 +37,7 @@ export const resetPassword = async ({ email }) => {
     }
   );
 
-  return respoense.data;
+  return response.data;
 };
 
 export const exchangeToken = async (refreshToken) => {

@@ -9,7 +9,7 @@ import { Colors } from "../../config/colors/Colors";
 // component
 import AppInput from "./AppInput";
 import AppButton from "../UI/AppButton";
-import Logo from "./Logo";
+import Logo from "../UI/Logo";
 import { editExpense, postExpense } from "../../hooks/axios";
 import ErrorOverlay from "../UI/ErrorOverlay";
 import LoadingOverlay from "../UI/LoadingOverLay";

@@ -1,12 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-// navigation
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "../../authentication/LoginScreen";
-import SignUpScreen from "../../authentication/SignUpScreen";
-import { Colors } from "../../../config/colors/Colors";
-import ResetPasswordScreen from "../../authentication/ResetPasswordScreen";
+
 const Stack = createNativeStackNavigator();
+import SignUpScreen from "../../authentication/SignUpScreen";
+import LoginScreen from "../../authentication/LoginScreen";
+import ResetPasswordScreen from "../../authentication/ResetPasswordScreen";
 
 export default function AuthStack() {
   return (
@@ -16,19 +13,9 @@ export default function AuthStack() {
         animation: "none",
       }}
     >
-      <Stack.Screen
-        name="login"
-        component={LoginScreen}
-        options={{ title: "Login" }}
-      />
-      <Stack.Screen
-        name="signUp"
-        component={SignUpScreen}
-        options={{ title: "SignUp" }}
-      />
+      <Stack.Screen name="login" component={LoginScreen} />
+      <Stack.Screen name="signUp" component={SignUpScreen} />
       <Stack.Screen name="resetPassword" component={ResetPasswordScreen} />
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({});

@@ -1,4 +1,3 @@
-// managing expense in firbase
 import axios from "axios";
 
 const BASEURL = "https://expensetracker-7c464-default-rtdb.firebaseio.com";

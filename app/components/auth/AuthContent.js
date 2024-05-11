@@ -1,91 +1,90 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { memo, useCallback, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-// component
-import AppInput from "../manageExpenses/AppInput";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { debounce } from "lodash";
+
+import AppInput from "../manageExpenses/AppInput";
 import AppButton from "../UI/AppButton";
-import Logo from "../manageExpenses/Logo";
+import Logo from "../UI/Logo";
 import FlatButton from "../UI/FlatButton";
 
-export default function AuthContent({
-  isLogin,
-  onAuthanticate,
-  isResetPassword,
-}) {
+const AuthContent = ({ isLogin, onAuthenticate, isResetPassword }) => {
   const navigation = useNavigation();
 
   // state of form data and validation
   const [form, setForm] = useState({
     email: "",
-    emailISVALID: true,
+    emailError: false,
     confirmEmail: "",
-    confirmEmailISVALID: true,
+    confirmEmailError: false,
     password: "",
-    passwordISVALID: true,
+    passwordError: false,
     confirmPassword: "",
-    confirmPasswordISVALID: true,
+    confirmPasswordError: false,
   });
 
   // this function swap screens login or signup
-  const handleSwapAuthenticationScreen = () => {
+  const handleSwapAuthenticationScreen = useCallback(() => {
     navigation.replace(isLogin ? "signUp" : "login");
-  };
+  }, []);
 
   // this function put input values in state
-  const handleInputChange = (type, text) => {
-    setForm((pre) => {
-      return {
-        ...pre,
-        [type]: text,
-      };
-    });
-  };
+  const handleInputChange = useCallback(
+    debounce((type, text) => {
+      setForm((pre) => {
+        return {
+          ...pre,
+          [type]: text,
+        };
+      });
+    }, 400),
+    []
+  );
 
-  // this function is confirm button od auth
+  // this function is confirm button of auth
   const handleConfirmAuth = () => {
     // validation
-    let EMAILISVALID = !!(
-      form.email.includes("@") &&
-      form.email.length > 1 &&
-      form.email.trim()
+    let emailValidation = !!(
+      form?.email?.includes("@") &&
+      form?.email?.length > 1 &&
+      form?.email?.trim()
     );
-    let CONFIRMEMAILISVALID = !!(
-      form.email === form.confirmEmail &&
-      form.confirmEmail.length > 1 &&
-      form.confirmEmail.trim()
+    let confirmEmailValidation = !!(form.email === form.confirmEmail);
+    let passwordValidation = !!(
+      form.password.length >= 8 && form.password.trim()
     );
-    let PASSWORDISVALID = !!(form.password.length >= 8 && form.password.trim());
-    let CONFIRMEPASSWORDISVALID = !!(
-      form.password === form.confirmPassword &&
-      form.confirmPassword.length >= 8 &&
-      form.confirmPassword.trim()
-    );
+    let confirmPasswordValidation = !!(form.password === form.confirmPassword);
 
     // throw error
     if (
-      !EMAILISVALID ||
+      !emailValidation ||
       (!isResetPassword &&
-        (!PASSWORDISVALID ||
-          (!isLogin && (!CONFIRMEMAILISVALID || !CONFIRMEPASSWORDISVALID))))
+        (!passwordValidation ||
+          (!isLogin &&
+            (!confirmEmailValidation || !confirmPasswordValidation))))
     ) {
       setForm((pre) => {
         return {
           ...pre,
-          emailISVALID: EMAILISVALID,
-          confirmEmailISVALID: CONFIRMEMAILISVALID,
-          passwordISVALID: PASSWORDISVALID,
-          confirmPasswordISVALID: CONFIRMEPASSWORDISVALID,
+          emailError: !emailValidation,
+          confirmEmailError: !confirmEmailValidation,
+          passwordError: !passwordValidation,
+          confirmPasswordError: !confirmPasswordValidation,
         };
       });
     } else {
-      onAuthanticate({ email: form.email, password: form.password });
+      onAuthenticate({ email: form.email, password: form.password });
     }
   };
 
-  const handleResetPassword = () => {
+  const handleResetPassword = useCallback(() => {
     navigation.replace("resetPassword");
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -94,51 +93,42 @@ export default function AuthContent({
         <View style={styles.inputsContainer}>
           <AppInput
             label={"Email"}
-            isError={!form.emailISVALID}
-            value={form.email}
-            onChangeText={handleInputChange.bind(this, "email")}
+            isError={form.emailError}
+            onChangeText={(txt) => handleInputChange("email", txt)}
             autoCapitalize={"none"}
             keyboardType={"email-address"}
-            autoCorrect={false}
           />
           {!isResetPassword && !isLogin && (
             <AppInput
               label={"Confirm Email"}
-              isError={!form.confirmEmailISVALID}
-              value={form.confirmEmail}
-              onChangeText={handleInputChange.bind(this, "confirmEmail")}
+              isError={form.confirmEmailError}
+              onChangeText={(txt) => handleInputChange("confirmEmail", txt)}
               autoCapitalize={"none"}
               keyboardType={"email-address"}
-              autoCorrect={false}
             />
           )}
           {!isResetPassword && (
             <AppInput
               label={"Password"}
-              isError={!form.passwordISVALID}
-              value={form.password}
-              onChangeText={handleInputChange.bind(this, "password")}
-              autoCapitalize={"none"}
-              autoCorrect={false}
+              isError={form.passwordError}
+              onChangeText={(txt) => handleInputChange("password", txt)}
             />
           )}
+          {!isResetPassword && !isLogin && (
+            <AppInput
+              label={"Confirm Password"}
+              isError={form.confirmPasswordError}
+              onChangeText={(txt) => handleInputChange("confirmPassword", txt)}
+            />
+          )}
+        </View>
+        {/* ......................actions......................... */}
+        <View>
           {isLogin && (
             <FlatButton onPress={handleResetPassword}>
               Reset Password
             </FlatButton>
           )}
-          {!isResetPassword && !isLogin && (
-            <AppInput
-              label={"Confirm Password"}
-              isError={!form.confirmPasswordISVALID}
-              value={form.confirmPassword}
-              onChangeText={handleInputChange.bind(this, "confirmPassword")}
-              autoCapitalize={"none"}
-              autoCorrect={false}
-            />
-          )}
-        </View>
-        <View style={styles.btnContainer}>
           <AppButton onPress={handleConfirmAuth}>
             {isLogin ? "Login" : isResetPassword ? "Reset Password" : "Sign Up"}
           </AppButton>
@@ -149,17 +139,21 @@ export default function AuthContent({
       </View>
     </View>
   );
-}
+};
+
+export default memo(AuthContent);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: Colors.green800,
+    paddingVertical: hp(2),
+    paddingHorizontal: wp(4),
   },
   form: {
     borderRadius: 10,
     backgroundColor: "#00000027",
-    padding: 15,
+    paddingVertical: hp(1.5),
+    paddingHorizontal: wp(3),
   },
 });

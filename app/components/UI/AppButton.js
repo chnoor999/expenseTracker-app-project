@@ -1,8 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-// constant colors
+import { memo } from "react";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function AppButton({ children, style, onPress }) {
+const AppButton = ({ children, style, onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -12,25 +16,27 @@ export default function AppButton({ children, style, onPress }) {
       <Text style={[styles.text, style]}>{children}</Text>
     </TouchableOpacity>
   );
-}
+};
+
+export default memo(AppButton);
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.green700,
     borderRadius: 6,
-    padding: 10,
-    minWidth:150,
     alignItems: "center",
     justifyContent: "center",
-    margin: 10,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { height: 0, width: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 4,
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1),
+    marginVertical: hp(0.8),
   },
   text: {
-    fontSize: 16,
+    fontSize: hp(1.8),
     color: "#fff",
   },
 });

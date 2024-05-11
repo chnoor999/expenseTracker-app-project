@@ -1,21 +1,15 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useReducer } from "react";
 
 export const ExpenseContext = createContext({
   data: [],
   set: (expense) => {},
-  add: (expnese) => {},
+  add: (expense) => {},
   deleteExpense: (id) => {},
   edit: (id, expense) => {},
 });
 
 export const ExpenseContextProvider = ({ children }) => {
-  const intialState = [];
+  const initialState = [];
 
   const expenseReducer = (state, action) => {
     switch (action.type) {
@@ -47,7 +41,7 @@ export const ExpenseContextProvider = ({ children }) => {
   };
   const [expenseState, expenseDispatch] = useReducer(
     expenseReducer,
-    intialState
+    initialState
   );
 
   const value = {

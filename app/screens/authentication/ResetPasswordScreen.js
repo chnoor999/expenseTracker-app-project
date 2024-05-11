@@ -1,17 +1,17 @@
-import { Alert, StyleSheet} from "react-native";
-import React, { useState } from "react";
-import AuthContent from "../../components/auth/AuthContent";
-
+import { Alert } from "react-native";
+import { useCallback, useState } from "react";
 import { resetPassword } from "../../hooks/auth";
+
+import AuthContent from "../../components/auth/AuthContent";
 import LoadingOverLay from "../../components/UI/LoadingOverLay";
 
 export default function ResetPasswordScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleResetPassword = async ({ email }) => {
+  const handleResetPassword = useCallback(async ({ email }) => {
     try {
       setIsLoading(true);
-      const data = await resetPassword({email});
+      const data = await resetPassword({ email });
       Alert.alert(
         "Password Reset",
         `Password reset email sent successfully to ${data.email}`
@@ -21,13 +21,11 @@ export default function ResetPasswordScreen() {
       Alert.alert("Error", "Error resetting password Try Again later");
       setIsLoading(false);
     }
-  };
+  }, []);
 
   if (isLoading) {
     return <LoadingOverLay />;
   }
 
-  return <AuthContent isResetPassword onAuthanticate={handleResetPassword} />;
+  return <AuthContent isResetPassword onAuthenticate={handleResetPassword} />;
 }
-
-const styles = StyleSheet.create({});
