@@ -1,15 +1,37 @@
-import { Ionicons } from "@expo/vector-icons";
 import { memo } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
-const Icons = ({ color, size, name, style, onPress }) => {
+const Icons = ({
+  color,
+  size,
+  name,
+  style,
+  onPress,
+  IoniconsIcon,
+  FontAwesomeIcon,
+}) => {
   return (
-    <Ionicons
-      style={style}
-      name={name}
-      color={color}
-      size={size}
-      onPress={onPress}
-    />
+    <>
+      {IoniconsIcon && (
+        <Ionicons
+          style={style}
+          name={name}
+          color={color}
+          size={size}
+          onPress={onPress}
+        />
+      )}
+      {FontAwesomeIcon && (
+        <FontAwesome
+          style={style}
+          name={name}
+          color={color}
+          size={size}
+          onPress={onPress}
+        />
+      )}
+    </>
   );
 };
 

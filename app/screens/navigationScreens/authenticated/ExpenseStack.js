@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Colors } from "../../../config/colors/Colors";
 
 const Stack = createNativeStackNavigator();
-import ManageExpense from "../../expenseScreens/ManageExpnese";
+import ManageExpense from "../../expenseScreens/ManageExpense";
 import ExpenseTab from "./ExpenseTab";
 import DeleteBox from "../../../components/UI/DeleteBox";
 

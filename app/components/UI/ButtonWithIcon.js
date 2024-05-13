@@ -6,11 +6,28 @@ import {
 } from "react-native-responsive-screen";
 
 import Icons from "./Icons";
+import Dot from "../UI/Dot";
 
-const ButtonWithIcon = ({ name, size, color, onPress }) => {
+const ButtonWithIcon = ({
+  name,
+  size,
+  color,
+  onPress,
+  active,
+  style,
+  IoniconsIcon,
+  FontAwesomeIcon,
+}) => {
   return (
-    <Pressable style={styles.container} onPress={onPress}>
-      <Icons size={size} color={color} name={name} />
+    <Pressable style={[styles.container, style]} onPress={onPress}>
+      <Icons
+        size={size}
+        color={color}
+        name={name}
+        IoniconsIcon={IoniconsIcon}
+        FontAwesomeIcon={FontAwesomeIcon}
+      />
+      {active && <Dot />}
     </Pressable>
   );
 };
@@ -19,7 +36,6 @@ export default memo(ButtonWithIcon);
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
     padding: hp(1),
     borderRadius: 100,
     marginHorizontal: wp(2),

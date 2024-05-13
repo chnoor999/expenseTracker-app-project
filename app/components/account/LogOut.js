@@ -1,33 +1,46 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import IconButton from "../UI/Icons";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { memo } from "react";
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function LogOut({ onPress }) {
+import IconButton from "../UI/Icons";
+
+const LogOut = ({ onPress }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.7}
       style={styles.container}
     >
-      <IconButton name={"exit"} color={"#ffffffc7"} size={24} />
+      <IconButton
+        IoniconsIcon
+        name={"exit"}
+        color={"#ffffffc7"}
+        size={hp(2.5)}
+      />
       <Text style={styles.text}>Logout</Text>
     </TouchableOpacity>
   );
-}
+};
+
+export default memo(LogOut);
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     flexDirection: "row",
     alignItems: "center",
-    gap: 20,
-    margin: 10,
+    gap: wp(4),
     backgroundColor: Colors.green700,
     borderRadius: 6,
+    marginVertical: hp(1),
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1.2),
   },
   text: {
-    fontSize: 18,
+    fontSize: hp(2),
     color: "#fff",
   },
 });

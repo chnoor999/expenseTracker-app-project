@@ -1,43 +1,44 @@
-import React, { useState } from "react";
-// component
-import ExpenseOutput from "../../components/expenses/ExpenseOutput";
-// context
+import { useCallback, useMemo, useState } from "react";
 import { useExpenseContext } from "../../store/Expense-Context";
-import { useDaysago } from "../../hooks/date";
-// constant color
+import { useDaysAgo } from "../../hooks/date";
 import { Colors } from "../../config/colors/Colors";
-// icons
-import { FontAwesome } from "@expo/vector-icons";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+
+import ExpenseOutput from "../../components/expenses/ExpenseOutput";
+import ButtonWithIcon from "../../components/UI/ButtonWithIcon";
 
 export default function RecentExpense() {
   const { data } = useExpenseContext();
 
-  // state for how many days ago i want to list the expense
-  const [daysAgo, setdaysAgo] = useState(7);
-  // chnag 7days ago to 30 days ago toggle
-  const toggleDaysAgo = () => {
-    setdaysAgo((pre) => (pre == 7 ? 30 : 7));
-  };
+  const [daysAgo, setDysAgo] = useState(7);
 
-  // function that filter an data of last 7 days
-  const recentData = data.filter((item) => {
-    const ago7Days = useDaysago(daysAgo);
-    return item.date > ago7Days;
-  });
+  const toggleDays = useCallback(() => {
+    setDysAgo((pre) => (pre == 7 ? 30 : 7));
+  }, []);
+
+  const recentData = useMemo(
+    () =>
+      data.filter((item) => {
+        const agoDaysDateObj = useDaysAgo(daysAgo);
+        return item.date > agoDaysDateObj;
+      }),
+    [data, daysAgo]
+  );
 
   return (
     <ExpenseOutput
       expenseData={recentData}
       expensePeriod={`Last ${daysAgo} Days`}
       emptyText={"No recent expenses recorded."}
-      // swapButton={
-      //   <FontAwesome
-      //     onPress={toggleDaysAgo}
-      //     name="exchange"
-      //     size={16}
-      //     color={Colors.green700}
-      //   />
-      // }
+      swapButton={
+        <ButtonWithIcon
+          FontAwesomeIcon
+          name="exchange"
+          size={hp(2)}
+          color={Colors.green700}
+          onPress={toggleDays}
+        />
+      }
     />
   );
 }

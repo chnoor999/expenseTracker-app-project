@@ -1,74 +1,76 @@
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-//context
+import { StyleSheet, View } from "react-native";
+import { memo, useCallback, useState } from "react";
 import { useExpenseContext } from "../../store/Expense-Context";
-// navigation
+import { editExpense, postExpense } from "../../hooks/axios";
+import { useAuthContext } from "../../store/Auth-Context";
 import { useNavigation } from "@react-navigation/native";
-// constant colors
 import { Colors } from "../../config/colors/Colors";
-// component
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+
 import AppInput from "./AppInput";
 import AppButton from "../UI/AppButton";
 import Logo from "../UI/Logo";
-import { editExpense, postExpense } from "../../hooks/axios";
 import ErrorOverlay from "../UI/ErrorOverlay";
 import LoadingOverlay from "../UI/LoadingOverLay";
-import { useAuthContext } from "../../store/Auth-Context";
 
-export default function ExpenseForm({ isEditing, editID }) {
+const ExpenseForm = ({ isEditing, editID }) => {
   const navigation = useNavigation();
+
   const { data, edit, add } = useExpenseContext();
   const { token, userUid } = useAuthContext();
 
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  //finding data of editabele expense
-  const editabeleExpense = data.find((item) => item.id == editID);
+  //finding data of editable expense
+  const editableExpense = data.find((item) => item.id == editID);
 
   const today = new Date();
 
   // state that holds form data
   const [form, setForm] = useState({
-    amount: isEditing ? editabeleExpense.amount.toString() : "",
-    amountISVALID: true,
+    amount: isEditing ? editableExpense.amount.toString() : "",
+    amountError: false,
     date: isEditing
-      ? editabeleExpense.date.toISOString().slice(0, 10)
+      ? editableExpense.date.toISOString().slice(0, 10)
       : today.toISOString().slice(0, 10),
-    dateISVALID: true,
-    description: isEditing ? editabeleExpense.description : "",
-    descriptionISVALID: true,
+    dateError: false,
+    description: isEditing ? editableExpense.description : "",
+    descriptionError: false,
   });
 
   // function that store input text in it place
-  const handleOnChange = (type, text) => {
-    setForm((prevalue) => {
+  const handleOnChange = useCallback((type, text) => {
+    setForm((preValue) => {
       return {
-        ...prevalue,
+        ...preValue,
         [type]: text,
       };
     });
-  };
+  }, []);
 
-  const onConfirmHandler = async () => {
+  const onConfirmHandler = useCallback(async () => {
     const object = {
       amount: +form.amount,
       date: new Date(form.date),
       description: form.description,
     };
 
-    // form valiadtion
-    const amountISVALID = !isNaN(object.amount) && object.amount > 0;
-    const dateISVALID = object.date != "Invalid Date";
-    const descriptionISVALID = object.description.trim().length > 0;
+    // validation
+    const amountError = !isNaN(object.amount) && object.amount > 0;
+    const dateError = object.date != "Invalid Date";
+    const descriptionError = object.description.trim().length > 0;
 
-    if (!amountISVALID || !dateISVALID || !descriptionISVALID) {
+    if (!amountError || !dateError || !descriptionError) {
       setForm((pre) => {
         return {
           ...pre,
-          amountISVALID,
-          dateISVALID,
-          descriptionISVALID,
+          amountError: !amountError,
+          dateError: !dateError,
+          descriptionError: !descriptionError,
         };
       });
     } else {
@@ -92,13 +94,13 @@ export default function ExpenseForm({ isEditing, editID }) {
         }
       }
     }
-  };
+  }, [form]);
 
-  const onCancelHandler = () => {
+  const onCancelHandler = useCallback(() => {
     navigation.goBack();
-  };
+  }, []);
 
-  if (error?.length) {
+  if (error) {
     return <ErrorOverlay message={error} />;
   }
 
@@ -109,62 +111,68 @@ export default function ExpenseForm({ isEditing, editID }) {
   return (
     <View style={styles.formContainer}>
       <Logo />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View style={styles.box1}>
-          <AppInput
-            label={"Amount"}
-            containerStyle={{ flex: 1 }}
-            keyboardType={"numeric"}
-            value={form.amount}
-            onChangeText={handleOnChange.bind(this, "amount")}
-            isError={!form.amountISVALID}
-          />
-          <AppInput
-            label={"Date"}
-            containerStyle={{ flex: 1 }}
-            placeholder="YYYY-MM-DD"
-            value={form.date}
-            onChangeText={handleOnChange.bind(this, "date")}
-            isError={!form.dateISVALID}
-          />
-        </View>
-        <View>
-          <AppInput
-            label={"Description"}
-            multiline={true}
-            inputStyle={{ height: 100, textAlignVertical: "top" }}
-            value={form.description}
-            onChangeText={handleOnChange.bind(this, "description")}
-            isError={!form.descriptionISVALID}
-          />
-        </View>
-        <View style={styles.buttonsContainer}>
-          <AppButton onPress={onCancelHandler}>Cancel</AppButton>
-          <AppButton onPress={onConfirmHandler}>
-            {isEditing ? "Update" : "Add"}
-          </AppButton>
-        </View>
-      </KeyboardAvoidingView>
+      <View style={styles.box1}>
+        <AppInput
+          label={"Amount"}
+          keyboardType={"numeric"}
+          value={form.amount}
+          onChangeText={(txt) => handleOnChange("amount", txt)}
+          isError={form.amountError}
+          containerStyle={styles.inpContainer}
+        />
+        <AppInput
+          label={"Date"}
+          placeholder="YYYY-MM-DD"
+          containerStyle={styles.inpContainer}
+          value={form.date}
+          onChangeText={(txt) => handleOnChange("date", txt)}
+          isError={form.dateError}
+        />
+      </View>
+      <AppInput
+        label={"Description"}
+        multiline={true}
+        inputStyle={{ height: hp(12), textAlignVertical: "top" }}
+        value={form.description}
+        onChangeText={(txt) => handleOnChange("description", txt)}
+        isError={form.descriptionError}
+      />
+      <View style={styles.buttonsContainer}>
+        <AppButton containerStyle={styles.btn} onPress={onCancelHandler}>
+          Cancel
+        </AppButton>
+        <AppButton containerStyle={styles.btn} onPress={onConfirmHandler}>
+          {isEditing ? "Update" : "Add"}
+        </AppButton>
+      </View>
     </View>
   );
-}
+};
+
+export default memo(ExpenseForm);
 
 const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
-    // backgroundColor: Colors.green800,
-    padding: 15,
+    backgroundColor: Colors.green800,
+    paddingHorizontal: wp(3),
   },
   box1: {
     flexDirection: "row",
     alignItems: "center",
+    gap: wp(2),
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: wp(2),
+    gap: wp(4),
+  },
+  btn: {
+    flex: 1,
+  },
+  inpContainer: {
+    flex: 1,
   },
 });

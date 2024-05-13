@@ -1,11 +1,16 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../store/Auth-Context";
-
 import { Colors } from "../../config/colors/Colors";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+
 import ProfileLogo from "../../components/account/ProfileLogo";
 import LogOut from "../../components/account/LogOut";
 import LoadingOverlay from "../../components/UI/LoadingOverLay";
+import Icons from "../../components/UI/Icons";
 
 export default function AccountScreen() {
   const {
@@ -14,6 +19,7 @@ export default function AccountScreen() {
     userEmail,
     removeUserEmail,
     removeExpiredTime,
+    removeRefreshToken,
   } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,12 +31,13 @@ export default function AccountScreen() {
       },
       {
         text: "Logout",
-        onPress: async () => {
+        onPress: () => {
           setIsLoading(true);
-          await removeToken();
-          await removeUserId();
-          await removeExpiredTime();
-          await removeUserEmail();
+          removeToken();
+          removeUserId();
+          removeExpiredTime();
+          removeUserEmail();
+          removeRefreshToken();
         },
       },
     ]);
@@ -44,7 +51,15 @@ export default function AccountScreen() {
     <View style={styles.container}>
       <ProfileLogo />
       <View style={styles.emailContainer}>
-        <Text style={styles.email}>{userEmail}</Text>
+        <View style={styles.icon}>
+          <Icons
+            FontAwesomeIcon
+            name={"envelope"}
+            size={hp(1.6)}
+            color={"#fff"}
+          />
+          <Text style={styles.email}>{userEmail}</Text>
+        </View>
       </View>
       <LogOut onPress={handleLogout} />
     </View>
@@ -55,13 +70,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.green800,
+    paddingHorizontal: wp(3),
   },
   emailContainer: {
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: hp(1.6),
   },
   email: {
     color: "#fff",
-    paddingBottom: 20,
+    fontSize: hp(1.8),
+  },
+  icon: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    gap: wp(1),
   },
 });

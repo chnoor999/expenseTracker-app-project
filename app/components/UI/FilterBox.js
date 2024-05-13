@@ -1,14 +1,55 @@
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Colors } from "../../config/colors/Colors";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { useExpenseContext } from "../../store/Expense-Context";
 
 import AppInput from "../manageExpenses/AppInput";
 
-const FilterBox = ({ visible, onCancel, onApply, date, handleDateChange }) => {
+const FilterBox = ({ visible, setFilterBoxVisible, setFilteredData }) => {
+  const { data } = useExpenseContext();
+  const [date, setDate] = useState({ value: "", error: false });
+
+  const handleDateChange = (txt) => {
+    setDate((pre) => {
+      return {
+        ...pre,
+        value: txt,
+      };
+    });
+  };
+
+  const onRemove = () => {
+    setFilterBoxVisible(false);
+    setDate({ value: "", error: false });
+    setFilteredData({ showFilteredData: false, data: [] });
+  };
+
+  const onApply = () => {
+    const dateObj = new Date(date.value);
+    const dateIsValid = dateObj.toString() !== "Invalid Date";
+
+    if (dateIsValid) {
+      const filtered = data.filter((item) => {
+        return (
+          item.date.toISOString().slice(0, 10) ===
+          dateObj.toISOString().slice(0, 10)
+        );
+      });
+
+      setFilteredData({ showFilteredData: true, data: filtered });
+      setFilterBoxVisible(false);
+      setDate((pre) => {
+        return { ...pre, error: false };
+      });
+    } else {
+      setDate((pre) => ({ ...pre, error: true }));
+    }
+  };
+
   return (
     <Modal transparent={true} visible={visible} animationType="fade">
       <View style={styles.container}>
@@ -21,16 +62,13 @@ const FilterBox = ({ visible, onCancel, onApply, date, handleDateChange }) => {
           <View>
             <AppInput
               placeholder="YYYY-MM-DD"
-              inputStyle={[
-                styles.input,
-                date.isValid ? null : styles.inputError,
-              ]}
-              value={date.value}
+              inputStyle={[styles.input, date.error && styles.inputError]}
               onChangeText={handleDateChange}
+              value={date.value}
             />
           </View>
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={onCancel}>
+            <TouchableOpacity style={styles.btn} onPress={onRemove}>
               <Text style={styles.cancel}>Remove</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={onApply}>

@@ -36,7 +36,7 @@ export default function ExpenseTab() {
         options={{
           headerTitle: "All Expenses",
           tabBarIcon: ({ color }) => (
-            <Icons name={"calendar"} color={color} size={24} />
+            <Icons IoniconsIcon name={"calendar"} color={color} size={24} />
           ),
           headerRight: () => (
             <ButtonWithIcon
@@ -44,6 +44,7 @@ export default function ExpenseTab() {
               size={28}
               color={Colors.green100}
               onPress={addHandler}
+              IoniconsIcon
             />
           ),
         }}
@@ -54,7 +55,12 @@ export default function ExpenseTab() {
         options={{
           headerTitle: "Recent Expenses",
           tabBarIcon: ({ color }) => (
-            <Icons name={"hourglass-sharp"} color={color} size={24} />
+            <Icons
+              IoniconsIcon
+              name={"hourglass-sharp"}
+              color={color}
+              size={24}
+            />
           ),
         }}
       />
@@ -64,7 +70,7 @@ export default function ExpenseTab() {
         options={{
           title: "Account",
           tabBarIcon: ({ color }) => (
-            <Icons name={"person"} color={color} size={24} />
+            <Icons IoniconsIcon name={"person"} color={color} size={24} />
           ),
           headerRight: false,
         }}

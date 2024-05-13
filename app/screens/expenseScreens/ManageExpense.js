@@ -1,17 +1,15 @@
-import React, { useLayoutEffect, useState } from "react";
-// component
-import ExpenseForm from "../../components/manageExpenses/ExpenseForm";
-import IconButton from "../../components/UI/Icons";
-// constant color
+import { useLayoutEffect, useState } from "react";
 import { Colors } from "../../config/colors/Colors";
-// context
 import { useExpenseContext } from "../../store/Expense-Context";
 import { delExpense } from "../../hooks/axios";
-import ErrorOverlay from "../../components/UI/ErrorOverlay";
-import LoadingOverlay from "../../components/UI/LoadingOverLay";
 import { useAuthContext } from "../../store/Auth-Context";
 
-export default function ManageExpnese({ route, navigation }) {
+import ExpenseForm from "../../components/manageExpenses/ExpenseForm";
+import IconButton from "../../components/UI/Icons";
+import ErrorOverlay from "../../components/UI/ErrorOverlay";
+import LoadingOverlay from "../../components/UI/LoadingOverLay";
+
+export default function ManageExpense({ route, navigation }) {
   // id of expense object that want to edit
   const editID = route.params?.id;
   // condition for this screen is for editing or not

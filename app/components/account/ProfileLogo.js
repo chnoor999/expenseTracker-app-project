@@ -1,7 +1,11 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, View } from "react-native";
+import { memo } from "react";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 
-export default function ProfileLogo() {
+const ProfileLogo = () => {
   return (
     <View>
       <View style={styles.imageContainer}>
@@ -12,16 +16,18 @@ export default function ProfileLogo() {
       </View>
     </View>
   );
-}
+};
+
+export default memo(ProfileLogo);
 
 const styles = StyleSheet.create({
-    imageContainer:{
-        justifyContent:"center",
-        alignItems:"center",
-        paddingTop:50
-    },
-    image:{
-        width:100,
-        height:100
-    }
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: hp(5),
+  },
+  image: {
+    width: hp(11),
+    height: hp(11),
+  },
 });

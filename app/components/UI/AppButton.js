@@ -6,11 +6,11 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-const AppButton = ({ children, style, onPress }) => {
+const AppButton = ({ children, style, onPress, containerStyle }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={styles.container}
+      style={[styles.container, containerStyle]}
       activeOpacity={0.7}
     >
       <Text style={[styles.text, style]}>{children}</Text>

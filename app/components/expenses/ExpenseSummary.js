@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: wp(2),
-    paddingVertical: hp(1),
+    paddingVertical: hp(0.5),
     marginHorizontal: wp(2),
     marginVertical: hp(1.5),
   },
