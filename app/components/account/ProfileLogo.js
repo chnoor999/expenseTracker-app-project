@@ -1,9 +1,6 @@
 import { Image, StyleSheet, View } from "react-native";
 import { memo } from "react";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const ProfileLogo = () => {
   return (
