@@ -61,6 +61,7 @@ const Root = () => {
               const data = await exchangeToken(refreshToken);
               addToken(data.id_token);
               addExpiredTime(timeOfExpire);
+              console.log("exchange")
             } catch (error) {
               alert("Error Occurred Try Agian");
             }

@@ -27,6 +27,20 @@ export const AuthContextProvider = ({ children }) => {
   const [expiredTime, setExpiredTime] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
 
+  const authenticate = (data) => {
+    const timeOfExpire = Date.now() + 3600 * 1000;
+    AsyncStorage.setItem("expiredIn", timeOfExpire);
+    setExpiredTime(timeOfExpire);
+    AsyncStorage.setItem("token", data.idToken);
+    setToken(data.idToken);
+    AsyncStorage.setItem("userUid", data.localId);
+    setUserUid(data.localId);
+    AsyncStorage.setItem("userEmail", data.email);
+    setUserEmail(data.email);
+    AsyncStorage.setItem("refreshToken", data.refreshToken);
+    setRefreshToken(data.refreshToken);
+  };
+
   const addToken = (a) => {
     setToken(a);
     AsyncStorage.setItem("token", a);
