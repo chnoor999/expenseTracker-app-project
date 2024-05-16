@@ -13,14 +13,7 @@ import LoadingOverlay from "../../components/UI/LoadingOverLay";
 import Icons from "../../components/UI/Icons";
 
 export default function AccountScreen() {
-  const {
-    removeToken,
-    removeUserId,
-    userEmail,
-    removeUserEmail,
-    removeExpiredTime,
-    removeRefreshToken,
-  } = useAuthContext();
+  const { userEmail, logOutHandler } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogout = () => {
@@ -33,11 +26,7 @@ export default function AccountScreen() {
         text: "Logout",
         onPress: () => {
           setIsLoading(true);
-          removeToken();
-          removeUserId();
-          removeExpiredTime();
-          removeUserEmail();
-          removeRefreshToken();
+          logOutHandler();
         },
       },
     ]);

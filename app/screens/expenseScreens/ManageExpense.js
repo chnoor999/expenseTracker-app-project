@@ -16,13 +16,17 @@ export default function ManageExpense({ route, navigation }) {
   const isEditing = !!editID;
 
   const { deleteExpense } = useExpenseContext();
-  const { token, userUid } = useAuthContext();
+  const { token, userUid, exchangeTokenIfExpired } = useAuthContext();
 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // function handle press delete
   const handleDelete = async () => {
+    // exchanging token if expire
+    const newToken = await exchangeTokenIfExpired();
+    if (newToken) token = newToken;
+
     try {
       setIsLoading(true);
       await delExpense(token, userUid, editID);
@@ -39,6 +43,7 @@ export default function ManageExpense({ route, navigation }) {
       headerRight: () =>
         isEditing ? (
           <IconButton
+            IoniconsIcon
             name={"trash"}
             size={24}
             color={Colors.green100}

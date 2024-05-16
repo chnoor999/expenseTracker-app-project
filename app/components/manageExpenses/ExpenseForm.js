@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useExpenseContext } from "../../store/Expense-Context";
 import { editExpense, postExpense } from "../../hooks/axios";
 import { useAuthContext } from "../../store/Auth-Context";
@@ -20,13 +20,16 @@ const ExpenseForm = ({ isEditing, editID }) => {
   const navigation = useNavigation();
 
   const { data, edit, add } = useExpenseContext();
-  const { token, userUid } = useAuthContext();
+  let { token, userUid, exchangeTokenIfExpired } = useAuthContext();
 
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   //finding data of editable expense
-  const editableExpense = data.find((item) => item.id == editID);
+  const editableExpense = useMemo(
+    () => data.find((item) => item.id == editID),
+    [data]
+  );
 
   const today = new Date();
 
@@ -53,6 +56,10 @@ const ExpenseForm = ({ isEditing, editID }) => {
   }, []);
 
   const onConfirmHandler = useCallback(async () => {
+    // exchanging token if expire
+    const newToken = await exchangeTokenIfExpired();
+    if (newToken) token = newToken;
+
     const object = {
       amount: +form.amount,
       date: new Date(form.date),

@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { exchangeToken } from "../hooks/auth";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext({
@@ -7,17 +9,11 @@ const AuthContext = createContext({
   userEmail: "",
   expiredTime: "",
   refreshToken: "",
-  addRefreshToken: () => {},
-  removeRefreshToken: () => {},
-  addExpiredTime: () => {},
-  removeExpiredTime: () => {},
-  addToken: () => {},
-  removeToken: () => {},
-  addUserId: () => {},
-  removeUserId: () => {},
-  addUserEmail: () => {},
-  removeUserEmail: () => {},
   isAuthenticated: "",
+  authenticate: () => {},
+  fetchInitialData: () => {},
+  exchangeTokenIfExpired: () => {},
+  logOutHandler: () => {},
 });
 
 export const AuthContextProvider = ({ children }) => {
@@ -29,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const authenticate = (data) => {
     const timeOfExpire = Date.now() + 3600 * 1000;
-    AsyncStorage.setItem("expiredIn", timeOfExpire);
+    AsyncStorage.setItem("expiredIn", JSON.stringify(timeOfExpire));
     setExpiredTime(timeOfExpire);
     AsyncStorage.setItem("token", data.idToken);
     setToken(data.idToken);
@@ -41,68 +37,88 @@ export const AuthContextProvider = ({ children }) => {
     setRefreshToken(data.refreshToken);
   };
 
-  const addToken = (a) => {
-    setToken(a);
-    AsyncStorage.setItem("token", a);
+  const exchangeTokenInitially = async (refreshToken) => {
+    try {
+      const timeOfExpire = Date.now() + 3600 * 1000;
+      const data = await exchangeToken(refreshToken);
+      console.log("changed");
+      setExpiredTime(timeOfExpire);
+      setToken(data.id_token);
+      setRefreshToken(data.refresh_token);
+      await AsyncStorage.multiSet([
+        ["expiredIn", JSON.stringify(timeOfExpire)],
+        ["token", data.id_token],
+        ["refreshToken", data.refresh_token],
+      ]);
+    } catch (error) {
+      alert("Error Occurred Try Again");
+    }
   };
-  const removeToken = async () => {
-    await AsyncStorage.removeItem("token");
+
+  const fetchInitialData = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const userUid = await AsyncStorage.getItem("userUid");
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      const expiredIn = await AsyncStorage.getItem("expiredIn");
+      const refreshToken = await AsyncStorage.getItem("refreshToken");
+      if (token && userUid && userEmail && expiredIn && refreshToken) {
+        if (Date.now() >= expiredIn) {
+          await exchangeTokenInitially(refreshToken);
+        } else {
+          setToken(token);
+          setExpiredTime(JSON.parse(expiredIn));
+          setRefreshToken(refreshToken);
+        }
+        setUserUid(userUid);
+        setUserEmail(userEmail);
+      }
+    } catch (error) {
+      alert("Error while Opening App, Try Again.");
+    }
+  };
+
+  const exchangeTokenIfExpired = async () => {
+    if (Date.now() <= expiredTime) return;
+    console.log("run for change");
+    try {
+      const timeOfExpire = Date.now() + 3600 * 1000;
+      const data = await exchangeToken(refreshToken);
+      setExpiredTime(timeOfExpire);
+      setToken(data.id_token);
+      setRefreshToken(data.refresh_token);
+      await AsyncStorage.multiSet([
+        ["expiredIn", JSON.stringify(timeOfExpire)],
+        ["token", data.id_token],
+        ["refreshToken", data.refresh_token],
+      ]);
+      return data.id_token;
+    } catch (error) {
+      alert("Error Occurred Try Again");
+    }
+  };
+
+  const logOutHandler = async () => {
+    await AsyncStorage.clear();
     setToken("");
-  };
-
-  const addUserId = (a) => {
-    AsyncStorage.setItem("userUid", a);
-    setUserUid(a);
-  };
-  const removeUserId = async (a) => {
-    await AsyncStorage.removeItem("userUid");
     setUserUid("");
-  };
-
-  const addUserEmail = async (a) => {
-    await AsyncStorage.setItem("userEmail", a);
-    setUserEmail(a);
-  };
-  const removeUserEmail = async () => {
-    await AsyncStorage.removeItem("userEmail");
+    setExpiredTime("");
+    setRefreshToken("");
     setUserEmail("");
   };
 
-  const addExpiredTime = async (a) => {
-    await AsyncStorage.setItem("expiredIn", JSON.stringify(a));
-    setExpiredTime(a);
-  };
-  const removeExpiredTime = async () => {
-    await AsyncStorage.removeItem("expiredIn");
-    setExpiredTime("");
-  };
-
-  const addRefreshToken = async (a) => {
-    await AsyncStorage.setItem("refreshToken", a);
-    setRefreshToken(a);
-  };
-  const removeRefreshToken = async () => {
-    await AsyncStorage.removeItem("refreshToken");
-    setRefreshToken("");
-  };
-
   const value = {
+    authenticate,
+    fetchInitialData,
+    exchangeTokenIfExpired,
+    logOutHandler,
     token,
     userUid,
     userEmail,
     expiredTime,
     refreshToken,
-    addRefreshToken,
-    removeRefreshToken,
-    addExpiredTime,
-    removeExpiredTime,
-    addToken,
-    removeToken,
-    addUserId,
-    removeUserId,
-    addUserEmail,
-    removeUserEmail,
-    isAuthenticated: !!(!!token && !!userUid),
+    isAuthenticated:
+      userUid && token && expiredTime && refreshToken && userEmail,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

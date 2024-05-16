@@ -19,9 +19,13 @@ const DeleteBox = ({ navigation, route }) => {
   const [error, setError] = useState("");
 
   const { deleteExpense } = useExpenseContext();
-  const { token, userUid } = useAuthContext();
+  const { token, userUid, exchangeTokenIfExpired } = useAuthContext();
 
   const onDelete = async () => {
+    // exchanging token if expire
+    const newToken = await exchangeTokenIfExpired();
+    if (newToken) token = newToken;
+
     try {
       setIsLoading(true);
       setError("");

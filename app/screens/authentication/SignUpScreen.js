@@ -7,8 +7,7 @@ import AuthContent from "../../components/auth/AuthContent";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function SignUpScreen() {
-  const { addToken, addUserId, addUserEmail, addExpiredTime, addRefreshToken } =
-    useAuthContext();
+  const { authenticate } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,16 +17,10 @@ export default function SignUpScreen() {
   }, []);
 
   const handleSignup = useCallback(async ({ email, password }) => {
-    const timeOfExpire = Date.now() + 3600 * 1000;
-
     try {
       setIsLoading(true);
       const data = await AuthSignup({ email, password });
-      addToken(data.idToken);
-      addUserId(data.localId);
-      addUserEmail(data.email);
-      addExpiredTime(timeOfExpire);
-      addRefreshToken(data.refreshToken);
+      authenticate(data);
     } catch (error) {
       switch (error.response.data.error.message) {
         case "TOO_MANY_ATTEMPTS_TRY_LATER":

@@ -4,74 +4,27 @@ import { ExpenseContextProvider } from "./app/store/Expense-Context";
 import { AuthContextProvider, useAuthContext } from "./app/store/Auth-Context";
 import { useFonts } from "expo-font";
 import { Alert } from "react-native";
-import { exchangeToken } from "./app/hooks/auth";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
 import NetInfo from "@react-native-community/netinfo";
 import AuthStack from "./app/screens/navigationScreens/unAuthenticated/AuthStack";
 import LoadingOverLay from "./app/components/UI/LoadingOverLay";
 
 const Root = () => {
-  const {
-    isAuthenticated,
-    addToken,
-    addUserId,
-    addUserEmail,
-    expiredTime,
-    addExpiredTime,
-    addRefreshToken,
-    refreshToken,
-  } = useAuthContext();
+  const { isAuthenticated, fetchInitialData } = useAuthContext();
 
-  const [appIsReady, setAppIsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const token = await AsyncStorage.getItem("token");
-        const userUid = await AsyncStorage.getItem("userUid");
-        const userEmail = await AsyncStorage.getItem("userEmail");
-        const expiredIn = await AsyncStorage.getItem("expiredIn");
-        const refreshToken = await AsyncStorage.getItem("refreshToken");
-        if (token && userUid && userEmail && expiredIn && refreshToken) {
-          addToken(token);
-          addUserId(userUid);
-          addUserEmail(userEmail);
-          addExpiredTime(JSON.parse(expiredIn));
-          addRefreshToken(refreshToken);
-        }
-        setAppIsReady(true);
-      } catch (error) {
-        alert(error);
-      }
-    })();
+    const fetchData = async () => {
+      await fetchInitialData();
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, []);
 
-  const now = Date.now();
-  const isExpired = now >= expiredTime;
-
-  useEffect(() => {
-    if (expiredTime) {
-      if (isExpired) {
-        if (refreshToken) {
-          (async () => {
-            try {
-              const timeOfExpire = Date.now() + 3600 * 1000;
-              const data = await exchangeToken(refreshToken);
-              addToken(data.id_token);
-              addExpiredTime(timeOfExpire);
-              console.log("exchange")
-            } catch (error) {
-              alert("Error Occurred Try Agian");
-            }
-          })();
-        }
-      }
-    }
-  }, [expiredTime, refreshToken, isExpired]);
-
-  if (!appIsReady) {
+  if (isLoading) {
     return <LoadingOverLay />;
   }
 

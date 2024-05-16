@@ -7,8 +7,7 @@ import LoadingOverLay from "../../components/UI/LoadingOverLay";
 import ErrorOverlay from "../../components/UI/ErrorOverlay";
 
 export default function LoginScreen() {
-  const { addToken, addUserId, addUserEmail, addExpiredTime, addRefreshToken } =
-    useAuthContext();
+  const { authenticate } = useAuthContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,16 +17,10 @@ export default function LoginScreen() {
   }, []);
 
   const handleLogin = useCallback(async ({ email, password }) => {
-    const timeOfExpire = Date.now() + 3600 * 1000;
-
     try {
       setIsLoading(true);
       const data = await AuthLogin({ email, password });
-      addToken(data.idToken);
-      addUserId(data.localId);
-      addUserEmail(data.email);
-      addExpiredTime(timeOfExpire);
-      addRefreshToken(data.refreshToken);
+      authenticate(data);
     } catch (error) {
       switch (error.response.data.error.message) {
         case "INVALID_LOGIN_CREDENTIALS":
