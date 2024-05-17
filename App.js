@@ -1,9 +1,9 @@
+import { Alert } from "react-native";
 import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { ExpenseContextProvider } from "./app/store/Expense-Context";
 import { AuthContextProvider, useAuthContext } from "./app/store/Auth-Context";
 import { useFonts } from "expo-font";
-import { Alert } from "react-native";
 
 import ExpenseStack from "./app/screens/navigationScreens/authenticated/ExpenseStack";
 import NetInfo from "@react-native-community/netinfo";

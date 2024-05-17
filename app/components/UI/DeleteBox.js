@@ -22,13 +22,13 @@ const DeleteBox = ({ navigation, route }) => {
   const { token, userUid, exchangeTokenIfExpired } = useAuthContext();
 
   const onDelete = async () => {
-    // exchanging token if expire
-    const newToken = await exchangeTokenIfExpired();
-    if (newToken) token = newToken;
-
     try {
       setIsLoading(true);
       setError("");
+      // exchanging token if expire
+      const newToken = await exchangeTokenIfExpired();
+      if (newToken) token = newToken;
+
       await delExpense(token, userUid, id);
       deleteExpense(id);
       setIsLoading(false);

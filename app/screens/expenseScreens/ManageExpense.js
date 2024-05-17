@@ -23,12 +23,12 @@ export default function ManageExpense({ route, navigation }) {
 
   // function handle press delete
   const handleDelete = async () => {
-    // exchanging token if expire
-    const newToken = await exchangeTokenIfExpired();
-    if (newToken) token = newToken;
-
     try {
       setIsLoading(true);
+      // exchanging token if expire
+      const newToken = await exchangeTokenIfExpired();
+      if (newToken) token = newToken;
+      
       await delExpense(token, userUid, editID);
       deleteExpense(editID);
       navigation.goBack();

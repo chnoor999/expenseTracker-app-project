@@ -21,7 +21,7 @@ export default function AllExpense() {
     data: [],
   });
 
-  const [isFetched, setIsFetched] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
 
   const toggleFilterBox = useCallback(() => {
@@ -33,6 +33,7 @@ export default function AllExpense() {
     (async () => {
       try {
         setError(null);
+        setIsLoading(true);
         const data = await getExpense(token, userUid);
         const arr = [];
         for (const key in data) {
@@ -43,18 +44,19 @@ export default function AllExpense() {
           arr.push(obj);
         }
         set(arr.reverse());
-        setIsFetched(true);
+        setIsLoading(false);
       } catch (error) {
         setError("Failed to fetch expenses try again later.");
+        setIsLoading(false);
       }
     })();
   }, [token, userUid]);
 
-  if (!isFetched && error?.length) {
+  if (error) {
     return <ErrorOverlay message={error} />;
   }
 
-  if (!isFetched) {
+  if (isLoading) {
     return <LoadingOverLay />;
   }
 

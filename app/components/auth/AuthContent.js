@@ -42,12 +42,12 @@ const AuthContent = ({ isLogin, onAuthenticate, isResetPassword }) => {
           [type]: text,
         };
       });
-    }, 400),
+    }, 200),
     []
   );
 
   // this function is confirm button of auth
-  const handleConfirmAuth = () => {
+  const handleConfirmAuth = useCallback(() => {
     // validation
     let emailValidation = !!(
       form?.email?.includes("@") &&
@@ -80,7 +80,7 @@ const AuthContent = ({ isLogin, onAuthenticate, isResetPassword }) => {
     } else {
       onAuthenticate({ email: form.email, password: form.password });
     }
-  };
+  }, [form]);
 
   const handleResetPassword = useCallback(() => {
     navigation.replace("resetPassword");

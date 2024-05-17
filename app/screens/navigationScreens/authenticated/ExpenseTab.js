@@ -1,13 +1,11 @@
 import { StyleSheet } from "react-native";
-// navigation
+import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../../../config/colors/Colors";
+import { useCallback } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
-import { useNavigation } from "@react-navigation/native";
-// constant colors
-import { Colors } from "../../../config/colors/Colors";
-// icons
+
 import Icons from "../../../components/UI/Icons";
-// screens
 import AllExpense from "../../expenseScreens/AllExpense";
 import RecentExpense from "../../expenseScreens/RecentExpense";
 import AccountScreen from "../../account/AccountScreen";
@@ -15,9 +13,10 @@ import ButtonWithIcon from "../../../components/UI/ButtonWithIcon";
 
 export default function ExpenseTab() {
   const navigation = useNavigation();
-  const addHandler = () => {
+
+  const addHandler = useCallback(() => {
     navigation.navigate("manageExpense");
-  };
+  }, []);
 
   return (
     <Tab.Navigator

@@ -27,6 +27,7 @@ const ButtonWithIcon = ({
         IoniconsIcon={IoniconsIcon}
         FontAwesomeIcon={FontAwesomeIcon}
       />
+
       {active && <Dot />}
     </Pressable>
   );

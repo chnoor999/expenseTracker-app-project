@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useAuthContext } from "../../store/Auth-Context";
 import { Colors } from "../../config/colors/Colors";
 import {
@@ -16,7 +16,7 @@ export default function AccountScreen() {
   const { userEmail, logOutHandler } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       {
         text: "Cancel",
@@ -30,7 +30,7 @@ export default function AccountScreen() {
         },
       },
     ]);
-  };
+  }, []);
 
   if (isLoading) {
     return <LoadingOverlay message={"Logging out"} />;

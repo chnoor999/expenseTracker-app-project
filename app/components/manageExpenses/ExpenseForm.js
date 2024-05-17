@@ -56,10 +56,6 @@ const ExpenseForm = ({ isEditing, editID }) => {
   }, []);
 
   const onConfirmHandler = useCallback(async () => {
-    // exchanging token if expire
-    const newToken = await exchangeTokenIfExpired();
-    if (newToken) token = newToken;
-
     const object = {
       amount: +form.amount,
       date: new Date(form.date),
@@ -84,6 +80,10 @@ const ExpenseForm = ({ isEditing, editID }) => {
       if (isEditing) {
         try {
           setIsLoading(true);
+          // exchanging token if expire
+          const newToken = await exchangeTokenIfExpired();
+          if (newToken) token = newToken;
+
           await editExpense(token, userUid, editID, object);
           edit(editID, object);
           navigation.goBack();
@@ -93,6 +93,10 @@ const ExpenseForm = ({ isEditing, editID }) => {
       } else {
         try {
           setIsLoading(true);
+          // exchanging token if expire
+          const newToken = await exchangeTokenIfExpired();
+          if (newToken) token = newToken;
+
           const id = await postExpense(token, userUid, object);
           add({ ...object, id });
           navigation.goBack();
