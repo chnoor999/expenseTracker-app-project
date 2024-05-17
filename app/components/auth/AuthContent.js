@@ -112,6 +112,8 @@ const AuthContent = ({ isLogin, onAuthenticate, isResetPassword }) => {
               label={"Password"}
               isError={form.passwordError}
               onChangeText={(txt) => handleInputChange("password", txt)}
+              forPassword
+              showEyeOnPassword={form.password}
             />
           )}
           {!isResetPassword && !isLogin && (
@@ -119,6 +121,8 @@ const AuthContent = ({ isLogin, onAuthenticate, isResetPassword }) => {
               label={"Confirm Password"}
               isError={form.confirmPasswordError}
               onChangeText={(txt) => handleInputChange("confirmPassword", txt)}
+              forPassword
+              showEyeOnPassword={form.confirmPassword}
             />
           )}
         </View>
