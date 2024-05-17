@@ -1,9 +1,33 @@
-import { Image, StyleSheet, View } from "react-native";
-import { memo } from "react";
+import { Image, Keyboard, StyleSheet, View } from "react-native";
+import { memo, useEffect, useState } from "react";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const Logo = () => {
-  return (
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  return isKeyboardVisible ? (
+    <View style={styles.noLogoStyle} />
+  ) : (
     <View style={styles.container}>
       <Image
         style={styles.image}
@@ -24,5 +48,8 @@ const styles = StyleSheet.create({
   image: {
     width: hp(10),
     height: hp(10),
+  },
+  noLogoStyle: {
+    paddingTop: hp(10),
   },
 });
