@@ -62,9 +62,11 @@ const FilterBox = ({ visible, setFilterBoxVisible, setFilteredData }) => {
           <View>
             <AppInput
               placeholder="YYYY-MM-DD"
-              inputStyle={[styles.input, date.error && styles.inputError]}
+              inputStyle={[styles.input]}
               onChangeText={handleDateChange}
               value={date.value}
+              containerStyle={styles.inpContainer}
+              inputWrapper={date.error && styles.inputError}
             />
           </View>
           <View style={styles.btnContainer}>
@@ -105,10 +107,13 @@ const styles = StyleSheet.create({
     fontSize: hp(1.85),
     marginTop: hp(1),
   },
+  inpContainer: {
+    marginVertical: hp(0.5),
+  },
   input: {
     alignSelf: "center",
-    marginVertical: hp(1),
     fontSize: hp(2.4),
+    flex: 0,
   },
   inputError: {
     backgroundColor: "#f7b4a8",

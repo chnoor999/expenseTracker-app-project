@@ -15,6 +15,7 @@ const AppInput = ({
   isError,
   forPassword,
   showEyeOnPassword,
+  inputWrapper,
   ...props
 }) => {
   const [togglePassword, setTogglePassword] = useState(true);
@@ -30,7 +31,7 @@ const AppInput = ({
           {label} {<Text style={styles.error}>{isError ? "*" : null}</Text>}
         </Text>
       ) : null}
-      <View style={styles.inpContainer}>
+      <View style={[styles.inpContainer, inputWrapper]}>
         <TextInput
           autoCapitalize={"none"}
           autoCorrect={false}
